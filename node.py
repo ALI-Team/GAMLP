@@ -16,7 +16,15 @@ class Node:
     def __pow__(self, other):
         return PowNode(self, other)
 
+    def __eq__(self, other):
+        return Equation(self, other)
+
     def eval(self):
         return NotImplemented
 
+    def simplify(self):
+        return NotImplemented
+
+
 from operators import *
+from equation import Equation

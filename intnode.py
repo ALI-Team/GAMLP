@@ -1,4 +1,3 @@
-
 from node import Node
 class IntNode(Node):
     def __init__(self,n):

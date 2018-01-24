@@ -1,10 +1,11 @@
 from operatornode import OperatorNode
+import functools
 class AddNode(OperatorNode):
-    def __init__(self, left, right):
-        self.left=left
-        self.right=right
+    def __init__(self, *terms):
+        self.terms=terms
+
     def eval(self):
-        return self.left.eval()+self.right.eval()
+        return functools.reduce(lambda x,y:x+y, map(lambda z:z.eval()))
 
 
 class SubNode(OperatorNode):
@@ -16,11 +17,11 @@ class SubNode(OperatorNode):
 
 
 class MulNode(OperatorNode):
-    def __init__(self, left, right):
-        self.left=left
-        self.right=right
+    def __init__(self, *terms):
+        self.terms=terms
+
     def eval(self):
-        return self.left.eval()*self.right.eval()
+        return functools.reduce(lambda x,y:x*y, map(lambda z:z.eval()))
 
 
 class DivNode(OperatorNode):
