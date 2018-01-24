@@ -1,4 +1,8 @@
-gamlp
+Makefile
+src/Makefile
+autom4te.cache/
+config.status
+
 # Created by https://www.gitignore.io/api/linux,macos,emacs,python,autotools
 
 ### Emacs ###
