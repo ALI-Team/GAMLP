@@ -22,6 +22,9 @@ class Node:
     def eval(self):
         return NotImplemented
 
+    def simplifyed(self):
+        return NotImplemented
+
     def simplify(self):
         return NotImplemented
 
