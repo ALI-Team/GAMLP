@@ -6,6 +6,8 @@ class IntNode(Node):
 
     def eval(self):
         return self.n
+    def simplify(self):
+        return self
         
         
     

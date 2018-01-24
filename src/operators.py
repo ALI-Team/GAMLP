@@ -5,8 +5,18 @@ class AddNode(OperatorNode):
         self.terms=terms
 
     def eval(self):
-        return functools.reduce(lambda x,y:x+y, map(lambda z:z.eval()))
+        return functools.reduce(lambda x,y:x+y, map(lambda z:z.eval(), self.terms))
 
+    def simplifyed(self):
+        terms=[]
+        for term in self.terms:
+            simplifyed=term.simplify()
+            if isinstance(simplifted, AddNode):
+                terms.extend(simplifyed.terms)
+            else:
+                terms.append(simplifyed)
+
+                
 
 class SubNode(OperatorNode):
     def __init__(self, left, right):
@@ -21,7 +31,7 @@ class MulNode(OperatorNode):
         self.terms=terms
 
     def eval(self):
-        return functools.reduce(lambda x,y:x*y, map(lambda z:z.eval()))
+        return functools.reduce(lambda x,y:x*y, map(lambda z:z.eval(), self.terms))
 
 
 class DivNode(OperatorNode):

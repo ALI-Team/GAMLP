@@ -1,3 +1,10 @@
+import sys
+class BadScript(Exception):
+    pass
+print("operator_gen.py is not a bad script")
+raise BadScript
+
+
 class Operator:
     def __init__(self,name,operator, multi=False):
         self.name=name
