@@ -1,20 +1,19 @@
 from .operatornode import OperatorNode
 import functools
+from . import intnode
+from . import simplifyer
 class AddNode(OperatorNode):
     def __init__(self, *terms):
-        self.terms=terms
+        self.terms=list(terms)
 
     def eval(self):
         return functools.reduce(lambda x,y:x+y, map(lambda z:z.eval(), self.terms))
 
     def simplifyed(self):
-        terms=[]
-        for term in self.terms:
-            simplifyed=term.simplify()
-            if isinstance(simplifted, AddNode):
-                terms.extend(simplifyed.terms)
-            else:
-                terms.append(simplifyed)
+        term=simplifyer.simplify_homogen(self)
+        print("return")
+        print(term)
+        return term
 
                 
 
@@ -28,10 +27,16 @@ class SubNode(OperatorNode):
 
 class MulNode(OperatorNode):
     def __init__(self, *terms):
-        self.terms=terms
+        self.terms=list(terms)
 
     def eval(self):
         return functools.reduce(lambda x,y:x*y, map(lambda z:z.eval(), self.terms))
+
+    def simplifyed(self):
+        term=simplifyer.simplify_homogen(self)
+        print("return")
+        print(term)
+        return term
 
 
 class DivNode(OperatorNode):
@@ -48,4 +53,5 @@ class PowNode(OperatorNode):
         self.right=right
     def eval(self):
         return self.left.eval()**self.right.eval()
+
 
