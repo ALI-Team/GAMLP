@@ -23,10 +23,10 @@ class Node:
         return NotImplemented
 
     def simplifyed(self):
-        return NotImplemented
+        raise NotImplementedError
 
     def simplify(self):
-        return NotImplemented
+        raise NotImplementedError
 
 
 from .operators import *
