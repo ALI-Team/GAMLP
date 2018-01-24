@@ -153,8 +153,8 @@ ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
-am__DIST_COMMON = $(srcdir)/Makefile.in AUTHORS ChangeLog NEWS README \
-	install-sh missing
+am__DIST_COMMON = $(srcdir)/Makefile.in ChangeLog install-sh missing \
+	py-compile
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -197,12 +197,12 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /home/Luka/Documents/Python/GAMLP/missing aclocal-1.15
+ACLOCAL = aclocal-1.15
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /home/Luka/Documents/Python/GAMLP/missing autoconf
-AUTOHEADER = ${SHELL} /home/Luka/Documents/Python/GAMLP/missing autoheader
-AUTOMAKE = ${SHELL} /home/Luka/Documents/Python/GAMLP/missing automake-1.15
+AUTOCONF = autoconf
+AUTOHEADER = autoheader
+AUTOMAKE = automake-1.15
 AWK = gawk
 CYGPATH_W = echo
 DEFS = -DPACKAGE_NAME=\"GAMLP\" -DPACKAGE_TARNAME=\"gamlp\" -DPACKAGE_VERSION=\"1.0\" -DPACKAGE_STRING=\"GAMLP\ 1.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"gamlp\" -DVERSION=\"1.0\"
@@ -217,7 +217,7 @@ INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LIBOBJS = 
 LIBS = 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/Luka/Documents/Python/GAMLP/missing makeinfo
+MAKEINFO = makeinfo
 MKDIR_P = /usr/bin/mkdir -p
 PACKAGE = gamlp
 PACKAGE_BUGREPORT = 
