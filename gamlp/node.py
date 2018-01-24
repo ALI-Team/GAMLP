@@ -26,5 +26,5 @@ class Node:
         return NotImplemented
 
 
-from operators import *
-from equation import Equation
+from .operators import *
+from .equation import Equation

@@ -1,4 +1,4 @@
-from node import Node
+from .node import Node
 class IntNode(Node):
     def __init__(self,n):
         super().__init__()

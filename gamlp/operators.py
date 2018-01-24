@@ -1,4 +1,4 @@
-from operatornode import OperatorNode
+from .operatornode import OperatorNode
 import functools
 class AddNode(OperatorNode):
     def __init__(self, *terms):

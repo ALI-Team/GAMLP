@@ -31,7 +31,7 @@ operators=[
     Operator("Div","/"),
     Operator("Pow","**")
 ]
-text="from operatornode import OperatorNode\nimport functools"
+text="from .operatornode import OperatorNode\nimport functools"
 for operator in operators:
     text+=operator.gen()+"\n"
 f=open("operators.py","w")
