@@ -19,8 +19,11 @@ class Node:
     def __eq__(self, other):
         return Equation(self, other)
 
+    def __hash__(self):
+        raise NotImplementedError
+
     def eval(self):
-        return NotImplemented
+        raise NotImplementedError
 
     def simplifyed(self):
         raise NotImplementedError
