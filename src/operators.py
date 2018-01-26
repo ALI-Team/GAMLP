@@ -1,7 +1,6 @@
 from .operatornode import OperatorNode
 import functools
 from . import intnode
-from . import simplifyer
 class AddNode(OperatorNode):
     def __init__(self, *terms):
         self.terms=list(terms)
@@ -11,9 +10,10 @@ class AddNode(OperatorNode):
 
     def simplifyed(self):
         term=simplifyer.simplify_homogen(self)
-        print("return")
-        print(term)
         return term
+
+    def formatted(self):
+        return "("+"+".join(map(lambda x:x.formatted(), self.terms))+")"
 
                 
 
@@ -23,6 +23,9 @@ class SubNode(OperatorNode):
         self.right=right
     def eval(self):
         return self.left.eval()-self.right.eval()
+
+    def formatted(self):
+        return "({}-{})".format(self.left, self.right)
 
 
 class MulNode(OperatorNode):
@@ -34,9 +37,10 @@ class MulNode(OperatorNode):
 
     def simplifyed(self):
         term=simplifyer.simplify_homogen(self)
-        print("return")
-        print(term)
         return term
+
+    def formatted(self):
+        return "("+"*".join(map(lambda x:x.formatted(), self.terms))+")"
 
 
 class DivNode(OperatorNode):
@@ -46,6 +50,9 @@ class DivNode(OperatorNode):
     def eval(self):
         return self.left.eval()/self.right.eval()
 
+    def formatted(self):
+        return "({}/{})".format(self.left, self.right)
+
 
 class PowNode(OperatorNode):
     def __init__(self, left, right):
@@ -54,4 +61,9 @@ class PowNode(OperatorNode):
     def eval(self):
         return self.left.eval()**self.right.eval()
 
+    def formatted(self):
+        return "({}^{})".format(self.left, self.right)
 
+
+
+from . import simplifyer

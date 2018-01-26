@@ -6,3 +6,6 @@ class VarNode(Node):
         return self
     def __hash__(self):
         return hash(self.name)
+
+    def formatted(self):
+        return self.name

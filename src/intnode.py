@@ -9,5 +9,7 @@ class IntNode(Node):
     def simplifyed(self):
         return self
         
+    def formatted(self):
+        return str(self.n)
         
     

@@ -22,6 +22,15 @@ class Node:
     def __hash__(self):
         raise NotImplementedError
 
+    def __str__(self):
+        return self.formatted()
+
+    def __format__(self, format_spec):
+        return self.formatted()
+
+    def formatted(self):
+        pass
+
     def eval(self):
         raise NotImplementedError
 
@@ -30,6 +39,9 @@ class Node:
 
     def simplify(self):
         raise NotImplementedError
+    
+
+        
 
 
 from .operators import *

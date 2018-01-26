@@ -6,16 +6,12 @@ def separate(node):
     terms=[]
     vset=variable.VariableSet()
     for term in term_list:
-        print(term)
         simplifyed_term=term.simplifyed()
-        print(simplifyed_term)
         if isinstance(simplifyed_term, unitnode.UnitNode):
             vset.append(simplifyed_term)
         elif isinstance(simplifyed_term, node.__class__):
             term_list.extend(simplifyed_term.terms)
         elif isinstance(simplifyed_term, intnode.IntNode):
-            print("number!")
-            print(simplifyed_term.n)
             numbers.append(simplifyed_term.n)
         else:
             terms.append(simplifyed_term)
@@ -23,6 +19,7 @@ def separate(node):
 
 def simplify_homogen(node):
     terms, numbers, vset=separate(node)
+    print(vset)
     if len(numbers) > 0:
         terms.append(intnode.IntNode(node.__class__(*list(map(lambda x:intnode.IntNode(x), numbers))).eval()))
     terms.extend(vset.nodes())
@@ -32,5 +29,5 @@ def simplify_homogen(node):
         return node.__class__(*terms)
 
 from . import intnode
-from . import unitnode
 from . import variable
+from . import unitnode
