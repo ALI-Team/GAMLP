@@ -16,8 +16,8 @@ class Node:
     def __pow__(self, other):
         return PowNode(self, other)
 
-    def __eq__(self, other):
-        return Equation(self, other)
+    #def __eq__(self, other):
+    #    return Equation(self, other)
 
     def __hash__(self):
         raise NotImplementedError

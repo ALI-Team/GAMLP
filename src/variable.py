@@ -26,6 +26,6 @@ class VariableSet:
             
                 
 def var(name):
-    return UnitNode(VarNode(name), IntNode(1))
+    return UnitNode(VarNode(name), intnode.IntNode(1))
 
-from .intnode import IntNode
+from . import intnode
