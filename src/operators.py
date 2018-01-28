@@ -1,6 +1,7 @@
 from .operatornode import OperatorNode
 import functools
 from . import intnode
+import itertools
 # issubclass
 
 class HomogenOperator(OperatorNode):
@@ -8,9 +9,6 @@ class HomogenOperator(OperatorNode):
         self.terms=list(terms)
         self.symbol=symbol
 
-    def simplifyed(self):
-        term=simplifyer.simplify_homogen(self)
-        return term
 
     def formatted(self):
         return "("+self.symbol.join(map(lambda x:x.formatted(), self.terms))+")"
@@ -48,6 +46,9 @@ class AddNode(HomogenOperator):
                 return unitnode.UnitNode(term.unit, (node.value+term.value).simplifyed())
         return None
 
+    def simplifyed(self):
+        term=simplifyer.simplify_homogen(self)
+        return term
 
 class MulNode(HomogenOperator):
     def __init__(self, *terms):
@@ -59,10 +60,11 @@ class MulNode(HomogenOperator):
     def merge_two(self, term, node):
         if isinstance(term, unitnode.UnitNode) or isinstance(node, unitnode.UnitNode):
             if isinstance(term, unitnode.UnitNode) and isinstance(node, unitnode.UnitNode):
-                print("TODO operators unit*unit")
-                raise NotImplemented
+                pass
+                #print("TODO operators unit*unit")
+                #raise NotImplemented
                 #if term.unit == node.unit:
-                    #return unitNode.UnitNode()
+                #    return unitNode.UnitNode()
             if isinstance(term, unitnode.UnitNode):
                 unit_node=term
                 other_node=node
@@ -75,8 +77,27 @@ class MulNode(HomogenOperator):
             return return_val
         return None
 
+    def simplifyed(self):
+        node=simplifyer.simplify_homogen(self)
+        if isinstance(node, MulNode):
+            add_nodes=[]
+            other=MulNode()
+            for term in node.terms:
+                if isinstance(term, AddNode):
+                    add_nodes.append(term.terms)
+                else:
+                    other.merge_in(term)
+            resulting_node=AddNode()
+            for selection in itertools.product(*add_nodes):
+                resulting_node.merge_in(MulNode(*other.terms,*selection))
+                print (selection)
+            #print("nst")
+            #print("\n-- ".join(list(map(str,add_nodes))))
+            #print("nsp")
+            return resulting_node.simplifyed()
 
-                
+        return node
+
 
 class SubNode(OperatorNode):
     def __init__(self, left, right):
