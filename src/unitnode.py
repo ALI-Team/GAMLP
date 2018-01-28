@@ -11,7 +11,7 @@ class UnitNode(node.Node):
         return self
     def formatted(self):
         if isinstance(self.unit, VarNode):
-            return "{}({})".format(self.value, self.unit)
+            return "({}){}".format(self.value, self.unit)
 
     def eval(self):
         raise ValueError("Cant eval with variables")
