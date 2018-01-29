@@ -11,5 +11,11 @@ class IntNode(Node):
         
     def formatted(self):
         return str(self.n)
+
+    def contains(self, value):
+        if isinstance(value, IntNode):
+            if value.n==self.n:
+                return True
+        return False
         
     

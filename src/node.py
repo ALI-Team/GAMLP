@@ -39,7 +39,9 @@ class Node:
 
     def simplify(self):
         raise NotImplementedError
-    
+
+    def contains(self, value):
+        raise NotImplementedError
 
         
 

@@ -11,6 +11,7 @@ class HomogenOperator(OperatorNode):
 
 
     def formatted(self):
+        print(self.terms)
         return "("+self.symbol.join(map(lambda x:x.formatted(), self.terms))+")"
 
     def merge_in(self, *nodes):
@@ -30,6 +31,9 @@ class HomogenOperator(OperatorNode):
     def merge_two(self, term, node):
         print("WARNING MERGE_TWO NOT IMPLEMENTED IN HOMOGENNODE")
         return None
+
+    def contains(self, value):
+        return True in list(map(lambda x:x.contains(value),self.terms))
     
 class AddNode(HomogenOperator):
     def __init__(self, *terms):
@@ -50,6 +54,9 @@ class AddNode(HomogenOperator):
         term=simplifyer.simplify_homogen(self)
         return term
 
+
+        
+
 class MulNode(HomogenOperator):
     def __init__(self, *terms):
         super().__init__("*", *terms)
@@ -60,21 +67,21 @@ class MulNode(HomogenOperator):
     def merge_two(self, term, node):
         if isinstance(term, unitnode.UnitNode) or isinstance(node, unitnode.UnitNode):
             if isinstance(term, unitnode.UnitNode) and isinstance(node, unitnode.UnitNode):
-                pass
-                #print("TODO operators unit*unit")
-                #raise NotImplemented
-                #if term.unit == node.unit:
-                #    return unitNode.UnitNode()
-            if isinstance(term, unitnode.UnitNode):
-                unit_node=term
-                other_node=node
-            elif isinstance(node, unitnode.UnitNode):
-                unit_node=node
-                other_node=term
+                if term.unit == node.unit:
+                    return unitnode.UnitNode(PowNode(term.unit,intnode.IntNode(2)), (term.value*node.value).simplifyed())
+                else:
+                    return unitnode.UnitNode(term.unit*node.unit, (term.value*node.value).simplifyed())
             else:
-                raise ValueError("um dafuq")
-            return_val=unitnode.UnitNode(unit_node.unit, (unit_node.value*other_node).simplifyed())
-            return return_val
+                if isinstance(term, unitnode.UnitNode):
+                    unit_node=term
+                    other_node=node
+                elif isinstance(node, unitnode.UnitNode):
+                    unit_node=node
+                    other_node=term
+                else:
+                    raise ValueError("um dafuq")
+                return_val=unitnode.UnitNode(unit_node.unit, (unit_node.value*other_node).simplifyed())
+                return return_val
         return None
 
     def simplifyed(self):
@@ -85,15 +92,13 @@ class MulNode(HomogenOperator):
             for term in node.terms:
                 if isinstance(term, AddNode):
                     add_nodes.append(term.terms)
+                elif isinstance(term, SubNode):
+                    add_nodes.append([term.left, term.right*intnode.IntNode(-1)])
                 else:
                     other.merge_in(term)
             resulting_node=AddNode()
             for selection in itertools.product(*add_nodes):
                 resulting_node.merge_in(MulNode(*other.terms,*selection))
-                print (selection)
-            #print("nst")
-            #print("\n-- ".join(list(map(str,add_nodes))))
-            #print("nsp")
             return resulting_node.simplifyed()
 
         return node
@@ -109,6 +114,11 @@ class SubNode(OperatorNode):
     def formatted(self):
         return "({}-{})".format(self.left, self.right)
 
+    def simplifyed(self):
+        return self
+
+    def contains(self, value):
+        return True in [self.left.contains(value), self.right.contains(value)]
 
 
 
@@ -133,6 +143,8 @@ class PowNode(OperatorNode):
     def formatted(self):
         return "({}^{})".format(self.left, self.right)
 
+    def contains(self, value):
+        return True in [self.left.contains(value), self.right.contains(value)]
 
 
 from . import simplifyer
