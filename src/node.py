@@ -44,6 +44,9 @@ class Node:
     def simplify(self):
         raise NotImplementedError
 
+    def latex(self):
+        raise NotImplementedError
+
     def contains_unknowns(self):
         children=self.get_children()
         if children == None:
