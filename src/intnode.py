@@ -4,6 +4,9 @@ class IntNode(Node):
         super().__init__()
         self.n=n
 
+    def __hash__(self):
+        return hash(self.n)
+    
     def eval(self):
         return self.n
     def simplifyed(self):
