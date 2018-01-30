@@ -5,7 +5,7 @@ from . import simplifyer
 class AddNode(OperatorNode):
     def __init__(self, *terms):
         self.terms=list(terms)
-
+        
     def eval(self):
         return functools.reduce(lambda x,y:x+y, map(lambda z:z.eval(), self.terms))
 

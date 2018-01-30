@@ -5,7 +5,7 @@ class IntNode(Node):
         self.n=n
 
     def __hash__(self):
-        return hash(self.n)
+        return hash(str(self.n))
     
     def eval(self):
         return self.n
