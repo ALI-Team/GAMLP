@@ -12,5 +12,17 @@ class IntNode(Node):
     def simplifyed(self):
         return self
         
+    def formatted(self):
+        return str(self.n)
+
+    def contains(self, value):
+        if isinstance(value, IntNode):
+            if value.n==self.n:
+                return True
+        return False
+    def get_children(self):
+        return None
         
+    def contains_unknown(self):
+        return False
     
