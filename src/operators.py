@@ -11,6 +11,13 @@ class HomogenOperator(OperatorNode):
         self.terms=list(terms)
         self.symbol=symbol
 
+    def __hash__(self):
+        terms_hash = 0
+        for term in self.terms:
+            terms_hash += hash(term)
+
+        return hash(str(terms_hash) + str(hash(self.symbol)))
+        
     def formatted(self):
         print(self.terms)
         return "("+self.symbol.join(map(lambda x:x.formatted(), self.terms))+")"
@@ -43,13 +50,6 @@ class AddNode(HomogenOperator):
     def __init__(self, *terms):
         super().__init__("+", *terms)
 
-    def __hash__(self):
-        terms_hash = 0
-        for term in self.terms:
-            terms_hash += hash(term)
-
-        return hash(str(terms_hash) + str(hash("+")))
-        
     def eval(self):
         return functools.reduce(lambda x,y:x+y, map(lambda z:z.eval(), self.terms))
 
@@ -75,13 +75,6 @@ class MulNode(HomogenOperator):
     def __init__(self, *terms):
         super().__init__("*", *terms)
 
-    def __hash__(self):
-        terms_hash = 0
-        for term in self.terms:
-            terms_hash += hash(term)
-
-        return hash(str(terms_hash) + str(hash("*")))
-        
     def eval(self):
         return functools.reduce(lambda x,y:x*y, map(lambda z:z.eval(), self.terms))
 
