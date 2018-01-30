@@ -18,3 +18,5 @@ class VarNode(Node):
             if value.name == self.name:
                 return True
         return False
+    def contains_unknown(self):
+        return True

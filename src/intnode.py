@@ -17,5 +17,9 @@ class IntNode(Node):
             if value.n==self.n:
                 return True
         return False
+    def get_children(self):
+        return None
         
+    def contains_unknown(self):
+        return False
     
