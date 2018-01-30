@@ -10,6 +10,9 @@ class UnitNode(node.Node):
         self.unit=unit
         super().__init__()
 
+    def __hash__(self):
+        return(hash(str(hash(unit))+str(hash(value))))
+        
     def simplifyed(self):
         if self.value.contains(self.unit):
             print("err")
