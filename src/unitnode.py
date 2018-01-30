@@ -34,5 +34,5 @@ class UnitNode(node.Node):
     def get_children(self):
         return [self.unit, self.value]
 
-    
-        
+    def latex(self):
+        return "{}{}".format(self.value.latex(), self.unit.latex())

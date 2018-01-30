@@ -3,6 +3,7 @@ import functools
 from . import intnode
 import itertools
 import copy
+from . import latex
 # issubclass
 
 class HomogenOperator(OperatorNode):
@@ -58,6 +59,9 @@ class AddNode(HomogenOperator):
         term=simplifyer.simplify_homogen(self)
         return term
 
+    def latex(self):
+        return latex.parentheses("+".join(map(lambda x:x.latex(), self.terms)))
+
 
         
 
@@ -107,6 +111,9 @@ class MulNode(HomogenOperator):
 
         return node
 
+    def latex(self):
+        return latex.parentheses("\\times".join(map(lambda x:x.latex(), self.terms)))
+
 
 class SubNode(OperatorNode):
     def __init__(self, left, right):
@@ -126,6 +133,8 @@ class SubNode(OperatorNode):
     def get_children(self):
         return [self.left, self.right]
 
+    def latex(self):
+        return latex.parentheses("{}-{}".format(self.left.latex(),self.right.latex()))
 
 
 class DivNode(OperatorNode):
@@ -140,6 +149,9 @@ class DivNode(OperatorNode):
 
     def get_children(self):
         return [self.left, self.right]
+
+    def latex(self):
+        return "\\frac{{{}}}{{{}}}".format(self.left.latex(),self.right.latex())
 
 class PowNode(OperatorNode):
     def __init__(self, left, right):
@@ -172,5 +184,7 @@ class PowNode(OperatorNode):
     def get_children(self):
         return [self.left, self.right]
 
+    def latex(self):
+        return "{}^{}".format(self.left.latex(),self.right.latex())
 from . import simplifyer
 from . import unitnode

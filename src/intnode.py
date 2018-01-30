@@ -23,3 +23,5 @@ class IntNode(Node):
     def contains_unknown(self):
         return False
     
+    def latex(self):
+        return str(self.n)

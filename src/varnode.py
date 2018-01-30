@@ -20,3 +20,6 @@ class VarNode(Node):
         return False
     def contains_unknown(self):
         return True
+
+    def latex(self):
+        return self.name
