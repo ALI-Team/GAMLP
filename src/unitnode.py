@@ -11,7 +11,7 @@ class UnitNode(node.Node):
         super().__init__()
 
     def __hash__(self):
-        return(hash(str(hash(unit))+str(hash(value))+"u")
+        return hash(str(hash(unit))+str(hash(value))+"u")
         
     def simplifyed(self):
         if self.value.contains(self.unit):
