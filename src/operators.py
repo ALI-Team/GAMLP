@@ -2,6 +2,7 @@ from .operatornode import OperatorNode
 import functools
 from . import intnode
 import itertools
+import copy
 # issubclass
 
 class HomogenOperator(OperatorNode):
@@ -30,10 +31,13 @@ class HomogenOperator(OperatorNode):
 
     def merge_two(self, term, node):
         print("WARNING MERGE_TWO NOT IMPLEMENTED IN HOMOGENNODE")
-        return None
+        raise NotImplemented
 
-    def contains(self, value):
-        return True in list(map(lambda x:x.contains(value),self.terms))
+    #def contains(self, value):
+        #return True in list(map(lambda x:x.contains(value),self.terms))
+
+    def get_children(self):
+        return self.terms
     
 class AddNode(HomogenOperator):
     def __init__(self, *terms):
@@ -117,8 +121,10 @@ class SubNode(OperatorNode):
     def simplifyed(self):
         return self
 
-    def contains(self, value):
-        return True in [self.left.contains(value), self.right.contains(value)]
+    #def contains(self, value):
+    #    return True in [self.left.contains(value), self.right.contains(value)]
+    def get_children(self):
+        return [self.left, self.right]
 
 
 
@@ -132,6 +138,8 @@ class DivNode(OperatorNode):
     def formatted(self):
         return "({}/{})".format(self.left, self.right)
 
+    def get_children(self):
+        return [self.left, self.right]
 
 class PowNode(OperatorNode):
     def __init__(self, left, right):
@@ -146,6 +154,23 @@ class PowNode(OperatorNode):
     def contains(self, value):
         return True in [self.left.contains(value), self.right.contains(value)]
 
+    def simplifyed(self):
+        if isinstance(self.left, unitnode.UnitNode):
+            return unitnode.UnitNode(copy.deepcopy(self.left.unit)**copy.deepcopy(self.right), copy.deepcopy(self.left.value)**copy.deepcopy(self.right)).simplifyed()
+        elif isinstance(self.left, MulNode):
+            return MulNode(*list(map(lambda x:x**copy.deepcopy(self.right),copy.deepcopy(self.left.terms)))).simplifyed()
+
+        elif isinstance(self.left, AddNode):
+            return AddNode(*list(map(lambda x:x**copy.deepcopy(self.right).simplifyed(),copy.deepcopy(self.left.terms)))).simplifyed()
+        elif isinstance(self.left, intnode.IntNode) and (self.right, intnode.IntNode):
+            if self.right.n == 1:
+                return intnode.IntNode(self.right.n)
+            elif self.left.n == 1:
+                return intnode.IntNode(1)
+        return self
+
+    def get_children(self):
+        return [self.left, self.right]
 
 from . import simplifyer
 from . import unitnode

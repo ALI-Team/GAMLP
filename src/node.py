@@ -28,6 +28,10 @@ class Node:
     def __format__(self, format_spec):
         return self.formatted()
 
+    def get_children(self):
+        return None
+        
+
     def formatted(self):
         pass
 
@@ -40,9 +44,19 @@ class Node:
     def simplify(self):
         raise NotImplementedError
 
-    def contains(self, value):
-        raise NotImplementedError
+    def contains_unknowns(self):
+        children=self.get_children()
+        if children == None:
+            print("NODE WITHOUT A GET_CHILDEN MUST CONTAIN A contains_unknown")
+            raise NotImplementedError
+        return True in list(map(lambda x:x.contains_unknown(value),children))
 
+    def contains(self, value):
+        children=self.get_children()
+        if children == None:
+            print("NODE WITHOUT A GET_CHILDEN MUST CONTAIN A contains")
+            raise NotImplementedError
+        return True in list(map(lambda x:x.contains(value),children))
         
 
 
