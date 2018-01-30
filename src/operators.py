@@ -11,7 +11,6 @@ class HomogenOperator(OperatorNode):
         self.terms=list(terms)
         self.symbol=symbol
 
-
     def formatted(self):
         print(self.terms)
         return "("+self.symbol.join(map(lambda x:x.formatted(), self.terms))+")"
@@ -44,6 +43,13 @@ class AddNode(HomogenOperator):
     def __init__(self, *terms):
         super().__init__("+", *terms)
 
+    def __hash__(self):
+        terms_hash = 0
+        for term in self.terms:
+            terms_hash += hash(term)
+
+        return hash(str(terms_hash) + str(hash("+")))
+        
     def eval(self):
         return functools.reduce(lambda x,y:x+y, map(lambda z:z.eval(), self.terms))
 
@@ -69,6 +75,13 @@ class MulNode(HomogenOperator):
     def __init__(self, *terms):
         super().__init__("*", *terms)
 
+    def __hash__(self):
+        terms_hash = 0
+        for term in self.terms:
+            terms_hash += hash(term)
+
+        return hash(str(terms_hash) + str(hash("*")))
+        
     def eval(self):
         return functools.reduce(lambda x,y:x*y, map(lambda z:z.eval(), self.terms))
 
@@ -119,6 +132,10 @@ class SubNode(OperatorNode):
     def __init__(self, left, right):
         self.left=left
         self.right=right
+
+    def __hash__(self):
+        return hash(str(str(hash(self.left))+str(hash(self.right))+str(hash("-"))))
+        
     def eval(self):
         return self.left.eval()-self.right.eval()
 
@@ -141,6 +158,10 @@ class DivNode(OperatorNode):
     def __init__(self, left, right):
         self.left=left
         self.right=right
+
+    def __hash__(self):
+        return hash(str(str(hash(self.left))+str(hash(self.right))+str(hash("/"))))
+
     def eval(self):
         return self.left.eval()/self.right.eval()
 
@@ -157,6 +178,10 @@ class PowNode(OperatorNode):
     def __init__(self, left, right):
         self.left=left
         self.right=right
+
+    def __hash__(self):
+        return hash(str(str(hash(self.left))+str(hash(self.right))+str(hash("^"))))
+        
     def eval(self):
         return self.left.eval()**self.right.eval()
 
