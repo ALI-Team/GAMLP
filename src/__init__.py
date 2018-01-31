@@ -1,0 +1,3 @@
+"""@package gamlp
+Main pkg
+"""
