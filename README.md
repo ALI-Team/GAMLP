@@ -7,4 +7,4 @@
 sudo make install
 ```
 ## Documentation
-[Autogen](http://gamlp.ivar.tech:8080/doc/)
+[Autogen](http://gamlp.ivar.tech:8080/doc/)(doxygen)
