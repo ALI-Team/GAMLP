@@ -17,6 +17,4 @@ print(solver.solve(Equation((var("x")-IntNode(2))*(var("x")+IntNode(5))*IntNode(
 simplify_expr((var("x")+IntNode(2))*(var("x")-IntNode(3)))
 print(solver.solve(Equation((var("x")+IntNode(2))*(var("x")-IntNode(3)), None)))
 
-simplify_expr((var("x")**IntNode(2)))
-
 print(((var("x")-IntNode(2))*(var("x")+IntNode(5))/IntNode(2)).latex())
