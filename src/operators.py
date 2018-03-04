@@ -136,7 +136,7 @@ class SubNode(OperatorNode):
         return "({}-{})".format(self.left, self.right)
 
     def simplifyed(self):
-        return self
+        return AddNode(self.left, (self.right*intnode.IntNode(-1))).simplifyed()
 
     #def contains(self, value):
     #    return True in [self.left.contains(value), self.right.contains(value)]
@@ -160,7 +160,7 @@ class DivNode(OperatorNode):
 
     def formatted(self):
         return "({}/{})".format(self.left, self.right)
-
+    
     def get_children(self):
         return [self.left, self.right]
 
