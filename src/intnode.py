@@ -23,7 +23,7 @@ class IntNode(Node):
     def get_children(self):
         return None
         
-    def contains_unknown(self):
+    def contains_unknowns(self):
         return False
     
     def latex(self):

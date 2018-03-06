@@ -18,7 +18,7 @@ class VarNode(Node):
             if value.name == self.name:
                 return True
         return False
-    def contains_unknown(self):
+    def contains_unknowns(self):
         return True
 
     def latex(self):

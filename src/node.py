@@ -66,7 +66,7 @@ class Node:
         if children == None:
             print("NODE WITHOUT A GET_CHILDEN MUST CONTAIN A contains_unknown")
             raise NotImplementedError
-        return True in list(map(lambda x:x.contains_unknown(value),children))
+        return True in list(map(lambda x:x.contains_unknowns(),children))
 
     def contains(self, value):
         """Uses the get_children() method to recursively check for a node. Override on nodes without children.
@@ -76,8 +76,18 @@ class Node:
             print("NODE WITHOUT A GET_CHILDEN MUST CONTAIN A contains")
             raise NotImplementedError
         return True in list(map(lambda x:x.contains(value),children))
+
+    def get_int_value(self):
+        if self.contains_unknowns():
+            return None
+
+        value=self.eval()
+        if isinstance(value, int) or value.is_integer():
+            return intnode.IntNode(int(value))
+        return None
         
 
 
 from .operators import *
+from . import intnode
 from .equation import Equation

@@ -19,7 +19,7 @@ class HomogenOperator(OperatorNode):
         return hash(str(terms_hash) + str(hash(self.symbol)))
         
     def formatted(self):
-        print(self.terms)
+        #print(self.terms)
         return "("+self.symbol.join(map(lambda x:x.formatted(), self.terms))+")"
 
     def merge_in(self, *nodes):
@@ -62,6 +62,8 @@ class AddNode(HomogenOperator):
         return None
 
     def simplifyed(self):
+        if self.get_int_value()!=None:
+            return self.get_int_value()
         term=simplifyer.simplify_homogen(self)
         return term
 
@@ -99,6 +101,8 @@ class MulNode(HomogenOperator):
         return None
 
     def simplifyed(self):
+        if self.get_int_value()!=None:
+            return self.get_int_value()
         node=simplifyer.simplify_homogen(self)
         if isinstance(node, MulNode):
             add_nodes=[]
@@ -113,6 +117,8 @@ class MulNode(HomogenOperator):
             resulting_node=AddNode()
             for selection in itertools.product(*add_nodes):
                 resulting_node.merge_in(MulNode(*other.terms,*selection))
+            if len(resulting_node.terms)==1:
+                return resulting_node.terms[0]
             return resulting_node.simplifyed()
 
         return node
@@ -136,6 +142,8 @@ class SubNode(OperatorNode):
         return "({}-{})".format(self.left, self.right)
 
     def simplifyed(self):
+        if self.get_int_value()!=None:
+            return self.get_int_value()
         return AddNode(self.left, (self.right*intnode.IntNode(-1))).simplifyed()
 
     #def contains(self, value):
@@ -168,6 +176,8 @@ class DivNode(OperatorNode):
         return "\\frac{{{}}}{{{}}}".format(self.left.latex(),self.right.latex())
 
     def simplifyed(self):
+        if self.get_int_value()!=None:
+            return self.get_int_value()
         return MulNode(self.left, (PowNode(self.right, intnode.IntNode(-1)))).simplifyed()
     
 class PowNode(OperatorNode):
@@ -188,6 +198,8 @@ class PowNode(OperatorNode):
         return True in [self.left.contains(value), self.right.contains(value)]
 
     def simplifyed(self):
+        if self.get_int_value() != None:
+            return self.get_int_value()
         if isinstance(self.left, unitnode.UnitNode):
             return unitnode.UnitNode(copy.deepcopy(self.left.unit)**copy.deepcopy(self.right), copy.deepcopy(self.left.value)**copy.deepcopy(self.right)).simplifyed()
         elif isinstance(self.left, MulNode):
@@ -195,11 +207,6 @@ class PowNode(OperatorNode):
 
         elif isinstance(self.left, AddNode):
             return AddNode(*list(map(lambda x:x**copy.deepcopy(self.right).simplifyed(),copy.deepcopy(self.left.terms)))).simplifyed()
-        elif isinstance(self.left, intnode.IntNode) and (self.right, intnode.IntNode):
-            if self.right.n == 1:
-                return intnode.IntNode(self.right.n)
-            elif self.left.n == 1:
-                return intnode.IntNode(1)
         return self
 
     def get_children(self):

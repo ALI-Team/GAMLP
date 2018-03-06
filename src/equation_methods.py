@@ -9,3 +9,10 @@ def pq_solver(equation):
     return [eq(sqrt_part), eq(-sqrt_part)]
     #equation.unknowns
 
+
+@solver.method(grade=1)
+def grade_one_solver(equation):
+    #UGLY AF
+    exps=equation.exponents
+    return [(-exps[0])/exps[1]]
+    #equation.unknowns
