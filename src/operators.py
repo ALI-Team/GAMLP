@@ -167,6 +167,9 @@ class DivNode(OperatorNode):
     def latex(self):
         return "\\frac{{{}}}{{{}}}".format(self.left.latex(),self.right.latex())
 
+    def simplifyed(self):
+        return MulNode(self.left, (PowNode(self.right, intnode.IntNode(-1)))).simplifyed()
+    
 class PowNode(OperatorNode):
     def __init__(self, left, right):
         self.left=left

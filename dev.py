@@ -20,4 +20,5 @@ def simplify_expr(expr):
 #print(((var("x")-IntNode(2))*(var("x")+IntNode(5))/IntNode(2)).latex())
 
 #simplify_expr(IntNode(5)-IntNode(3))
-simplify_expr((var("x")*IntNode(5)*IntNode(2)-var("x")*IntNode(8)+IntNode(2)))
+#simplify_expr((var("x")*IntNode(5)*IntNode(2)-var("x")*IntNode(8)+IntNode(2)))
+simplify_expr((IntNode(50)*var("x"))/IntNode(10))
