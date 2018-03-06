@@ -11,7 +11,7 @@ class UnitNode(node.Node):
         super().__init__()
 
     def __hash__(self):
-        return hash(str(hash(unit))+str(hash(value))+"u")
+        return hash(str(hash(self.unit))+str(hash(self.value))+"u")
         
     def simplifyed(self):
         if self.value.contains(self.unit):
@@ -39,3 +39,6 @@ class UnitNode(node.Node):
 
     def latex(self):
         return "{}{}".format(self.value.latex(), self.unit.latex())
+
+    def label(self):
+        return "*"

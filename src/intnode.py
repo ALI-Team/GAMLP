@@ -28,3 +28,6 @@ class IntNode(Node):
     
     def latex(self):
         return str(self.n)
+
+    def label(self):
+        return str(self.n)

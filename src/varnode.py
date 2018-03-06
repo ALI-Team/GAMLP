@@ -23,3 +23,6 @@ class VarNode(Node):
 
     def latex(self):
         return self.name
+
+    def label(self):
+        return self.name

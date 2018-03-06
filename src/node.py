@@ -46,6 +46,9 @@ class Node:
         """
         raise NotImplementedError
 
+    def label(self):
+        raise NotImplementedError
+
     def simplifyed(self):
         """Return a simplifyed clone of the node.
         """
@@ -85,6 +88,7 @@ class Node:
         if isinstance(value, int) or value.is_integer():
             return intnode.IntNode(int(value))
         return None
+
         
 
 
