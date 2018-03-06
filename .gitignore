@@ -2,6 +2,7 @@ Makefile
 src/Makefile
 autom4te.cache/
 config.status
+dot.png
 doc
 
 # Created by https://www.gitignore.io/api/linux,macos,emacs,python,autotools

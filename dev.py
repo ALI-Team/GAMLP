@@ -28,5 +28,5 @@ def simplify_expr(expr):
 #(((10^-1)*50))
 
 #simplify_expr((IntNode(50)*var("x"))/IntNode(10))
-print(dot.dot_code(((IntNode(50)*var("x"))/IntNode(10))+i(10)))
+print(dot.dot_code(i(1)+i(2)+i(3)+i(4)+i(5)))
 #print(solver.solve(Equation(((IntNode(50)*var("x"))/IntNode(10))+i(10),None)))
