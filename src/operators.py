@@ -89,7 +89,7 @@ class MulNode(HomogenOperator):
                 if term.unit == node.unit:
                     return unitnode.UnitNode(PowNode(term.unit,intnode.IntNode(2)), (term.value*node.value).simplifyed())
                 else:
-                    return unitnode.UnitNode(term.unit*node.unit, (term.value*node.value).simplifyed())
+                    return unitnode.UnitNode((term.unit*node.unit).simplifyed(), (term.value*node.value).simplifyed())
             else:
                 if isinstance(term, unitnode.UnitNode):
                     unit_node=term
@@ -102,6 +102,8 @@ class MulNode(HomogenOperator):
                 return_val=unitnode.UnitNode(unit_node.unit, (unit_node.value*other_node).simplifyed())
                 return return_val
         return None
+    def label(self):
+        return "×"
 
     def simplifyed(self):
         if self.get_int_value()!=None:

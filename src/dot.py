@@ -1,3 +1,7 @@
+from . import node
+from . import operatornode
+from . import unitnode
+from . import intnode
 def dot_code(tree):
     edges=[]
     def build_edge_list(node):
@@ -6,6 +10,10 @@ def dot_code(tree):
         if children==None:
             return
         for child in children:
+            if isinstance(child, unitnode.UnitNode) and child.value.eq(intnode.IntNode(1)):
+                edges.append((node,child.unit))
+                build_edge_list(child.unit)
+                continue
             edges.append((node,child))
             build_edge_list(child)
     build_edge_list(tree)
@@ -19,7 +27,11 @@ def dot_code(tree):
         name=int2base(i, len(digs))
         node.dot_number=i
         node.dot_name=name
-        code+="{} [label=\"{}\"];\n".format(name, node.label())
+        if issubclass(node.__class__,operatornode.OperatorNode) or isinstance(node,unitnode.UnitNode):
+            node_style="shape=box "
+        else:
+            node_style=""
+        code+="{} [{}label=\"{}\"];\n".format(name, node_style,node.label())
         i=i+1
 
     for f,t in edges:

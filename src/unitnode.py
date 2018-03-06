@@ -41,4 +41,4 @@ class UnitNode(node.Node):
         return "{}{}".format(self.value.latex(), self.unit.latex())
 
     def label(self):
-        return "*"
+        return "Unit"

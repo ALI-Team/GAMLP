@@ -62,6 +62,9 @@ class Node:
         """
         raise NotImplementedError
 
+    def eq(self, other):
+        return hash(self)==hash(other)
+
     def contains_unknowns(self):
         """Uses the get_children method to recursively check for unknowns. Override on nodes without children.
         """

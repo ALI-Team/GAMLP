@@ -1,13 +1,23 @@
+
 from src import dot
 from src.intnode import IntNode
 from src.variable import var
 from src.equation import Equation
 from src.solvers import solver
+from src.operators import *
 i=IntNode
+v=var
+
 def simplify_expr(expr):
     print(expr)
     print("    <=>")
     print(expr.simplifyed())
+
+def gdot(tree):
+    with open("/tmp/dot.dot", "w") as f:
+        f.write(dot.dot_code(tree))
+
+        
 
 
 #simplify_expr((var("x")*IntNode(5)*IntNode(2)+var("x")*IntNode(8)+IntNode(2)))
@@ -28,5 +38,11 @@ def simplify_expr(expr):
 #(((10^-1)*50))
 
 #simplify_expr((IntNode(50)*var("x"))/IntNode(10))
-print(dot.dot_code(i(1)+i(2)+i(3)+i(4)+i(5)))
+#print(dot.dot_code(AddNode(var,i(2),i(3),i(4),i(5))))
 #print(solver.solve(Equation(((IntNode(50)*var("x"))/IntNode(10))+i(10),None)))
+
+
+#gdot((v("a")*v("b")*v("c")*i(3)*i(5)))
+gdot((v("a")*v("b")*v("c")*i(3)*i(5)).simplifyed())
+#gdot(((v("a")*v("b")*v("c")).simplifyed()*(i(3)*i(5))))
+#gdot((v("a")*v("b")*v("c")).simplifyed())
