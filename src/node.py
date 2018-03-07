@@ -5,26 +5,42 @@ class Node:
         pass
 
     def __add__(self, other):
+        """Creates a AddNode
+        """
         return AddNode(self, other)
 
     def __sub__(self, other):
+        """Creates a SubNode
+        """
         return SubNode(self, other)
 
     def __mul__(self, other):
+        """Creates a MulNode
+        """
         return MulNode(self, other)
 
     def __truediv__(self, other):
+        """Creates a DivNode
+        """
         return DivNode(self, other)
     def __pow__(self, other):
+        """Creates a PowNode
+        """
         return PowNode(self, other)
 
     def __hash__(self):
+        """Hash the node with children should be the same for equal nodes.
+        """
         raise NotImplementedError
 
     def __str__(self):
+        """Calls node.formatted.
+        """
         return self.formatted()
 
     def __format__(self, format_spec):
+        """Calls node.formatted.
+        """
         return self.formatted()
 
     def get_children(self):
@@ -63,6 +79,8 @@ class Node:
         raise NotImplementedError
 
     def eq(self, other):
+        """Checks if two nodes are the same (has the same hash).
+        """
         return hash(self)==hash(other)
 
     def contains_unknowns(self):
@@ -84,6 +102,8 @@ class Node:
         return True in list(map(lambda x:x.contains(value),children))
 
     def get_int_value(self):
+        """Try to get a integer value of the node, if node is non integer or contains unknowns returns None.
+        """
         if self.contains_unknowns():
             return None
 
