@@ -46,7 +46,7 @@ class HomogenOperator(OperatorNode):
     def get_children(self):
         return self.terms
 
-    def label(self):
+    def label(self, debug=False):
         return self.symbol
     
 class AddNode(HomogenOperator):
@@ -102,7 +102,7 @@ class MulNode(HomogenOperator):
                 return_val=unitnode.UnitNode(unit_node.unit, (unit_node.value*other_node).simplifyed())
                 return return_val
         return None
-    def label(self):
+    def label(self, debug=False):
         return "×"
 
     def simplifyed(self):
@@ -159,7 +159,7 @@ class SubNode(OperatorNode):
     def latex(self):
         return latex.parentheses("{}-{}".format(self.left.latex(),self.right.latex()))
 
-    def label(self):
+    def label(self, debug=False):
         return "-"
 
 class DivNode(OperatorNode):
@@ -187,7 +187,7 @@ class DivNode(OperatorNode):
             return self.get_int_value()
         return MulNode(self.left, (PowNode(self.right, intnode.IntNode(-1)))).simplifyed()
 
-    def label(self):
+    def label(self, debug=False):
         return "/"
     
 class PowNode(OperatorNode):
@@ -224,7 +224,7 @@ class PowNode(OperatorNode):
 
     def latex(self):
         return "{}^{}".format(self.left.latex(),self.right.latex())
-    def label(self):
+    def label(self, debug=False):
         return "^"
 from . import simplifyer
 from . import unitnode

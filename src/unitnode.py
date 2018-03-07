@@ -40,5 +40,7 @@ class UnitNode(node.Node):
     def latex(self):
         return "{}{}".format(self.value.latex(), self.unit.latex())
 
-    def label(self):
-        return "Unit"
+    def label(self, debug=False):
+        if debug:
+            return "Unit"
+        return "×"

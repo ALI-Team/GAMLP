@@ -29,5 +29,5 @@ class IntNode(Node):
     def latex(self):
         return str(self.n)
 
-    def label(self):
+    def label(self, debug=False):
         return str(self.n)

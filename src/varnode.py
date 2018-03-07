@@ -24,5 +24,5 @@ class VarNode(Node):
     def latex(self):
         return self.name
 
-    def label(self):
+    def label(self, debug=False):
         return self.name

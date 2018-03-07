@@ -2,18 +2,17 @@ from . import node
 from . import operatornode
 from . import unitnode
 from . import intnode
-def dot_code(tree):
+def dot_code(tree, debug=False):
     edges=[]
     def build_edge_list(node):
         nonlocal edges
+
+        if isinstance(node, unitnode.UnitNode) and node.value.eq(intnode.IntNode(1)):
+            node=node.unit
         children=node.get_children()
         if children==None:
             return
         for child in children:
-            if isinstance(child, unitnode.UnitNode) and child.value.eq(intnode.IntNode(1)):
-                edges.append((node,child.unit))
-                build_edge_list(child.unit)
-                continue
             edges.append((node,child))
             build_edge_list(child)
     build_edge_list(tree)
@@ -31,7 +30,7 @@ def dot_code(tree):
             node_style="shape=box "
         else:
             node_style=""
-        code+="{} [{}label=\"{}\"];\n".format(name, node_style,node.label())
+        code+="{} [{}label=\"{}\"];\n".format(name, node_style,node.label(debug=debug))
         i=i+1
 
     for f,t in edges:
