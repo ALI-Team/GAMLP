@@ -76,7 +76,6 @@ class LibParser(Parser):
     @attach('e : VAR')
     def variable(self, name):
         return var(name)
-
 def parse(s):
     return parser.parse(s)
 

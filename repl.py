@@ -18,6 +18,15 @@ def exit():
     global go
     go=False
 
+@command("flag ([a-z]+)")
+def flag_command(f):
+    for c in f:
+        flags[c]=True
+
+@command("get ([a-z]+)")
+def flag_command(f):
+    print(flags.get(f))
+
 flags={}
 go=True
 
@@ -35,7 +44,6 @@ while go:
         tree=parse(expr)
         if flags.get("s"):
             tree=tree.simplifyed()
-
         if flags.get("l"):
             print(tree.latex())
         else:

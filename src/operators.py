@@ -87,7 +87,7 @@ class MulNode(HomogenOperator):
     def merge_two(self, term, node):
         if isinstance(term, unitnode.UnitNode) or isinstance(node, unitnode.UnitNode):
             if isinstance(term, unitnode.UnitNode) and isinstance(node, unitnode.UnitNode):
-                if term.unit == node.unit:
+                if term.unit.eq(node.unit):
                     return unitnode.UnitNode(PowNode(term.unit,intnode.IntNode(2)), (term.value*node.value).simplifyed())
                 else:
                     return unitnode.UnitNode((term.unit*node.unit).simplifyed(), (term.value*node.value).simplifyed())
