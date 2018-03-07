@@ -1,7 +1,0 @@
-AC_INIT(GAMLP, 1.0)
-
-AM_INIT_AUTOMAKE([foreign])
-AM_PATH_PYTHON([3.0])
-AC_CONFIG_FILES(Makefile src/Makefile)
-
-AC_OUTPUT
