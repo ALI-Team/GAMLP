@@ -2,9 +2,7 @@
 
 ## Installation
 ```
-./autogen.sh
-./configure
-sudo make install
+sudo python setup.py install
 ```
 ## Documentation
 [Autogen](http://gamlp.ivar.tech:8080/doc/)(doxygen)
