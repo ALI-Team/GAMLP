@@ -1,10 +1,10 @@
 
-from src import dot
-from src.intnode import IntNode
-from src.variable import var
-from src.equation import Equation
-from src.solvers import solver
-from src.operators import *
+from gamlp import dot
+from gamlp.intnode import IntNode
+from gamlp.variable import var
+from gamlp.equation import Equation
+from gamlp.solvers import solver
+from gamlp.operators import *
 i=IntNode
 v=var
 

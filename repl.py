@@ -1,5 +1,5 @@
-from src.parser import parse
-from src import dot
+from gamlp.parser import parse
+from gamlp import dot
 import os
 import re
 commands=[]
