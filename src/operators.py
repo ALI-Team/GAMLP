@@ -12,10 +12,10 @@ class HomogenOperator(OperatorNode):
         self.terms=list(terms)
         self.symbol=symbol
 
-    def __hash__(self):
+    def hash_node(self):
         terms_hash = 0
         for term in self.terms:
-            terms_hash += hash(term)
+            terms_hash += term.hash_node()
 
         return hash(str(terms_hash) + str(hash(self.symbol)))
         
@@ -138,8 +138,8 @@ class SubNode(OperatorNode):
         self.left=left
         self.right=right
 
-    def __hash__(self):
-        return hash(str(str(hash(self.left))+str(hash(self.right))+str(hash("-"))))
+    def hash_node(self):
+        return hash(str(str(self.left.hash_node())+str(self.right.hash_node())+str(hash("-"))))
         
     def eval(self):
         return self.left.eval()-self.right.eval()
@@ -168,8 +168,8 @@ class DivNode(OperatorNode):
         self.left=left
         self.right=right
 
-    def __hash__(self):
-        return hash(str(str(hash(self.left))+str(hash(self.right))+str(hash("/"))))
+    def hash_node(self):
+        return hash(str(str(self.left.hash_node())+str(self.right.hash_node())+str(hash("/"))))
 
     def eval(self):
         return self.left.eval()/self.right.eval()
@@ -196,8 +196,8 @@ class PowNode(OperatorNode):
         self.left=left
         self.right=right
 
-    def __hash__(self):
-        return hash(str(str(hash(self.left))+str(hash(self.right))+str(hash("^"))))
+    def hash_node(self):
+        return hash(str(str(self.left.hash_node())+str(self.right.hash_node())+str(hash("^"))))
         
     def eval(self):
         return self.left.eval()**self.right.eval()

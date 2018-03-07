@@ -28,7 +28,7 @@ class Node:
         """
         return PowNode(self, other)
 
-    def __hash__(self):
+    def hash_node(self):
         """Hash the node with children should be the same for equal nodes.
         """
         raise NotImplementedError
@@ -54,9 +54,6 @@ class Node:
         """
         pass
 
-    def __hash__(self):
-        return NotImplemented
-    
     def eval(self):
         """Calculates the approxemate value of the node.
         """
@@ -81,7 +78,7 @@ class Node:
     def eq(self, other):
         """Checks if two nodes are the same (has the same hash).
         """
-        return hash(self)==hash(other)
+        return self.hash_node()==other.hash_node()
 
     def contains_unknowns(self):
         """Uses the get_children method to recursively check for unknowns. Override on nodes without children.

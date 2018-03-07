@@ -4,7 +4,7 @@ class IntNode(Node):
         super().__init__()
         self.n=n
 
-    def __hash__(self):
+    def hash_node(self):
         return hash(str(self.n))
     
     def eval(self):

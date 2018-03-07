@@ -10,8 +10,8 @@ class UnitNode(node.Node):
         self.unit=unit
         super().__init__()
 
-    def __hash__(self):
-        return hash(str(hash(self.unit))+str(hash(self.value))+"u")
+    def hash_node(self):
+        return hash(str(self.unit.hash_node())+str(self.value.hash_node())+"u")
         
     def simplifyed(self):
         if self.value.contains(self.unit):
