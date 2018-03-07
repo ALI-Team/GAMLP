@@ -1,0 +1,3 @@
+#!/usr/bin/env python
+from gamlp_command import command
+command.execute()
