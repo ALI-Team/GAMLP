@@ -4,6 +4,7 @@ from . import intnode
 import itertools
 import copy
 from . import latex
+
 # issubclass
 
 class HomogenOperator(OperatorNode):
@@ -216,7 +217,11 @@ class PowNode(OperatorNode):
             return MulNode(*list(map(lambda x:x**copy.deepcopy(self.right),copy.deepcopy(self.left.terms)))).simplifyed()
 
         elif isinstance(self.left, AddNode):
-            return AddNode(*list(map(lambda x:x**copy.deepcopy(self.right).simplifyed(),copy.deepcopy(self.left.terms)))).simplifyed()
+            def simplify_addnode(a,b):
+                return AddNode(a**intnode.IntNode(2),b**intnode.IntNode(2),a*b*intnode.IntNode(2)).simplifyed()
+            return functools.reduce(simplify_addnode,self.left.terms)
+            #ERROR HERE
+            #return AddNode(*list(map(lambda x:x**copy.deepcopy(self.right).simplifyed(),copy.deepcopy(self.left.terms)))).simplifyed()
         return self
 
     def get_children(self):

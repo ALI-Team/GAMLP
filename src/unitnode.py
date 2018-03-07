@@ -20,6 +20,8 @@ class UnitNode(node.Node):
             print (copy.deepcopy(self.value)*copy.deepcopy(UnitNode(self.unit, intnode.IntNode(1))))
             return (copy.deepcopy(self.value)*copy.deepcopy(UnitNode(self.unit, intnode.IntNode(1)))).simplifyed()
         else:
+            if self.value.eq(intnode.IntNode(1)):
+                return self.unit
             return UnitNode(self.unit.simplifyed(), self.value.simplifyed())
     def formatted(self):
         if isinstance(self.unit, VarNode):

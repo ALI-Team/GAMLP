@@ -9,14 +9,19 @@ def dot_code(tree, debug=False):
 
         if isinstance(node, unitnode.UnitNode) and node.value.eq(intnode.IntNode(1)):
             node=node.unit
+            print("switchig node to")
+            print(node)
         children=node.get_children()
         if children==None:
+            print("no children")
+            print(node)
             return
         for child in children:
             edges.append((node,child))
             build_edge_list(child)
     build_edge_list(tree)
     nodes=set()
+    print(edges)
     for f,t in edges:
         nodes.add(f)
         nodes.add(t)
@@ -34,6 +39,8 @@ def dot_code(tree, debug=False):
         i=i+1
 
     for f,t in edges:
+        print(f)
+        print(t)
         code+="{} -- {};\n".format(f.dot_name,t.dot_name)
     
     return "graph tree {{\n{}}}".format(code) 
