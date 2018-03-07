@@ -61,7 +61,7 @@ class AddNode(HomogenOperator):
         if isinstance(node, intnode.IntNode) and isinstance(term, intnode.IntNode):
             intnode.IntNode(term.n+node.n)
         if isinstance(node, unitnode.UnitNode) and isinstance(term, unitnode.UnitNode):
-            if node.unit==term.unit:
+            if node.unit.eq(term.unit):
                 return unitnode.UnitNode(term.unit, (node.value+term.value).simplifyed())
         return None
 
