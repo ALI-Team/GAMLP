@@ -24,6 +24,10 @@ class Equation(Node):
     def label(self, debug=False):
         return "="
 
+    def get_children(self):
+        return [self.left, self.right]
+        
+
     def find_parts(self):
         self.node=self.simplifyed().left
         def add_unknown(name, power, value):

@@ -59,7 +59,7 @@ class AddNode(HomogenOperator):
 
     def merge_two(self, term, node):
         if isinstance(node, intnode.IntNode) and isinstance(term, intnode.IntNode):
-            intnode.IntNode(term.n+node.n)
+            return intnode.IntNode(term.n+node.n)
         if isinstance(node, unitnode.UnitNode) and isinstance(term, unitnode.UnitNode):
             if node.unit.eq(term.unit):
                 return unitnode.UnitNode(term.unit, (node.value+term.value).simplifyed())
@@ -69,6 +69,9 @@ class AddNode(HomogenOperator):
         if self.get_int_value()!=None:
             return self.get_int_value()
         term=simplifyer.simplify_homogen(self)
+        if isinstance(term,AddNode):
+            if len(term.terms)==1:
+                return term.terms[0]
         return term
 
     def latex(self):
@@ -102,6 +105,15 @@ class MulNode(HomogenOperator):
                     raise ValueError("um dafuq")
                 return_val=unitnode.UnitNode(unit_node.unit, (unit_node.value*other_node).simplifyed())
                 return return_val
+        if isinstance(term, PowNode) or isinstance(node, PowNode):
+            if isinstance(term, PowNode):
+                pownode=term
+                other=node
+            else:
+                pownode=node
+                other=term
+            if pownode.left.eq(other):
+                return PowNode(pownode.left,AddNode(pownode.right+intnode.IntNode(1)).simplifyed()).simplifyed()
         return None
     def label(self, debug=False):
         return "×"
@@ -222,7 +234,7 @@ class PowNode(OperatorNode):
             return functools.reduce(simplify_addnode,self.left.terms)
             #ERROR HERE
             #return AddNode(*list(map(lambda x:x**copy.deepcopy(self.right).simplifyed(),copy.deepcopy(self.left.terms)))).simplifyed()
-        return self
+        return PowNode(self.left.simplifyed(), self.right.simplifyed()) 
 
     def get_children(self):
         return [self.left, self.right]

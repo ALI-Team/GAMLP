@@ -2,6 +2,7 @@ from . import node
 from . import operatornode
 from . import unitnode
 from . import intnode
+from . import equation
 def dot_code(tree, debug=False):
     edges=[]
     def build_edge_list(node):
@@ -31,7 +32,7 @@ def dot_code(tree, debug=False):
         name=int2base(i, len(digs))
         node.dot_number=i
         node.dot_name=name
-        if issubclass(node.__class__,operatornode.OperatorNode) or isinstance(node,unitnode.UnitNode):
+        if issubclass(node.__class__,operatornode.OperatorNode) or isinstance(node,unitnode.UnitNode) or isinstance(node, equation.Equation):
             node_style="shape=box "
         else:
             node_style=""
