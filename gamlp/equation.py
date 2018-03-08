@@ -55,7 +55,7 @@ class Equation(Node):
                         add_unknown(term.unit.left.name,term.unit.right.eval(),amount)
         else:
             print("UNSUPPORTED WITH A * NODE IN EQ")
-            raise NotImplemented
+            raise NotImplementedError
         self.number_unknowns=len(self.unknowns)
         if self.number_unknowns == 1:
             self.unknown=list(self.unknowns)[0]
