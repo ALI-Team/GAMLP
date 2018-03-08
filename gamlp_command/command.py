@@ -3,6 +3,8 @@ import re
 
 from gamlp.parser import parse
 from gamlp import dot
+from gamlp import equation
+import purplex
 
 from . import flags
 from . import commands
@@ -19,7 +21,7 @@ def execute():
             version=pkg_resources.require("GAMLP")[0].version
         except pkg_resources.DistributionNotFound:
             version="?"
-    print("GAMLP version {}".format(version))
+    print("GAMLP version {} released under GPLv3".format(version))
     print("'help' for help")
     print("'flags' for avalible flags")
     print("'commands' for avalible commands")
@@ -30,6 +32,7 @@ def execute():
 
     dot_path=command_config.config["EXPORT"]["dot_path"]
     png_path=command_config.config["EXPORT"]["png_path"]
+    global go
     go=True
     while go:
         try:
@@ -38,17 +41,38 @@ def execute():
             break
         res=commands.parse_command(expr)
         if not res:
-            tree=parse(expr)
+            try:
+                tree=parse(expr)
+            except purplex.exception.NoMatchingTokenFoundError:
+                print("syntax error")
+                continue
+            except Exception as e:
+                print(e)
+                print("Error in parsing")
+                continue
             if flags.get("s"):
-                tree=tree.simplifyed()
-            if flags.get("l"):
-                output(tree.latex())
+                try:
+                    tree=tree.simplifyed()
+                except Exception as e:
+                    print(e)
+                    print("Error in simplifying")
+                    continue
+            if flags.get("e") and isinstance(tree, equation.Equation):
+                try:
+                    print(tree.solve())
+                except Exception as e:
+                    print(e)
+                    print("Error in solving")
+                    continue
             else:
-                output(tree)
-            if flags.get("d") or flags.get("b"):
-                with open(dot_path, "w") as f:
-                    f.write(dot.dot_code(tree, debug=flags.get("debug", False)))
-            if flags.get("b"):
-                os.system("dot -Tpng > {png} < {dot}".format(png=png_path, dot=dot_path))
-            if flags.get("f"):
-                os.system("feh {png}".format(png=png_path))
+                if flags.get("l"):
+                    output(tree.latex())
+                else:
+                    output(tree)
+                if flags.get("d") or flags.get("b"):
+                    with open(dot_path, "w") as f:
+                        f.write(dot.dot_code(tree, debug=flags.get("debug", False)))
+                if flags.get("b"):
+                    os.system("dot -Tpng > {png} < {dot}".format(png=png_path, dot=dot_path))
+                if flags.get("f"):
+                    os.system("feh {png}".format(png=png_path))

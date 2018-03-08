@@ -3,15 +3,29 @@ from . import operators
 from . import unitnode
 from . import varnode
 from . import intnode
+from . import solvers
 
 class Equation(Node):
     def __init__(self, left, right):
-        #TODO
-        self.node=left.simplifyed()
+        self.left=left
+        self.right=right
+
+    def simplifyed(self):
+        return Equation((self.left-self.right).simplifyed(),intnode.IntNode(0))
+
+    def solve(self):
         self.find_parts()
-        print("Detected {n}:th grade equation".format(n=self.grade))
+        return solvers.solver.solve(self)
+
+    
+    def formatted(self):
+        #print(self.terms)
+        return "{}={}".format(self.left.formatted(), self.right.formatted())
+    def label(self, debug=False):
+        return "="
 
     def find_parts(self):
+        self.node=self.simplifyed().left
         def add_unknown(name, power, value):
             if not name in self.unknowns:
                 self.unknowns[name]={}
@@ -20,11 +34,9 @@ class Equation(Node):
         if isinstance(self.node, operators.AddNode):
             self.constant=0
             for term in self.node.terms:
-                print(term.__class__)
                 if isinstance(term, unitnode.UnitNode):
                     if isinstance(term.unit, varnode.VarNode):
                         add_unknown(term.unit.name,1,term.value.n)
-                        #self.unknowns[term.unit.name][0]=term.value.n
                     elif isinstance(term.unit, operators.PowNode):
                         add_unknown(term.unit.left.name,term.unit.right.n,term.value.n)
 
@@ -41,7 +53,7 @@ class Equation(Node):
             self.exponents[0]=self.constant
         if self.number_unknowns > 1:
             print("UNSUPPORTED WITH MULIPLE UNKNOWNS")
-            raise NotImplemented
+            raise NotImplementedError
 
         if self.number_unknowns == 0:
             print("UNSUPPORTED WITH NO UNKNOWNS")

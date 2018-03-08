@@ -6,6 +6,7 @@ from . import node
 from .operators import *
 from .intnode import IntNode
 from .variable import var
+from . import equation
 
 
 class LibLexer(Lexer):
@@ -20,6 +21,8 @@ class LibLexer(Lexer):
     PLUS = TokenDef(r'\+')
     MINUS = TokenDef(r'-')
     POW = TokenDef(r'\^')
+
+    EQ = TokenDef(r'=')
 
     VAR = TokenDef(r'[a-zA-Z]+')
 
@@ -36,6 +39,7 @@ class LibParser(Parser):
         (LEFT, 'POW'),
         (LEFT, 'TIMES', 'DIVIDE'),
         (LEFT, 'PLUS', 'MINUS'),
+        (LEFT, 'EQ'),
     )
 
     @attach('e : LPAREN e RPAREN')
@@ -76,6 +80,13 @@ class LibParser(Parser):
     @attach('e : VAR')
     def variable(self, name):
         return var(name)
+
+    @attach('e : e EQ e')
+    def eq(self, left, eq, right):
+        return equation.Equation(left,right)
+def parse(s):
+    return parser.parse(s)
+
 def parse(s):
     return parser.parse(s)
 

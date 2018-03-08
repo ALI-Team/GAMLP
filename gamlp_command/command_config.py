@@ -6,7 +6,7 @@ def reset_config():
     global config
     config = configparser.ConfigParser()
     config["INIT"] = {
-        "flags":"s"
+        "flags":"se"
     }
     config["EXPORT"] = {
         "dot_path":"/tmp/dot.dot",

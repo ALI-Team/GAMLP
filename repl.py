@@ -1,5 +1,6 @@
 from gamlp.parser import parse
 from gamlp import dot
+from gamlp import equation
 import os
 import re
 commands=[]
@@ -44,10 +45,13 @@ while go:
         tree=parse(expr)
         if flags.get("s"):
             tree=tree.simplifyed()
-        if flags.get("l"):
-            print(tree.latex())
+        if not isinstance(tree, equation.Equation):
+            if flags.get("l"):
+                print(tree.latex())
+            else:
+                print(tree)
         else:
-            print(tree)
+            print(tree.solve())
 
         if flags.get("d") or flags.get("b"):
             with open("/tmp/dot.dot", "w") as f:

@@ -11,7 +11,7 @@ def get(flag, *args):
     if not char in flag_state:
         if len(args) > 0:
             return args[0]
-        return flags[char].default
+        return False
     return flag_state[char]
 
 def find_char(s):
@@ -36,5 +36,6 @@ Flag("b","builddot","Build the dot file and place it in currect dir as dot.png",
 Flag("s","simplify","Simplify input",True)
 Flag("l","latex","Output in latex",False)
 Flag("f","feh","Open outputed dot image with feh",False)
+Flag("e","equation","Solve equations",True)
 
 flag_state={}

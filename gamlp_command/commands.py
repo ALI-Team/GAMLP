@@ -2,6 +2,7 @@ import re
 
 from . import flags
 from .util import output
+from . import command_config
 commands=[]
 def command(regex, text):
     def decorator(f):
@@ -17,8 +18,7 @@ def set(flag,val):
 
 @command("(?:exit|quit)", "Exit")
 def exit():
-    global go
-    go=False
+    command.go=False
 
 @command("flag ([a-z]+)", "Set multiple flags to True")
 def flag_command(f):
@@ -31,7 +31,7 @@ def flag_command(f):
     if res == None:
         output("Unknown flag")
     else:
-        return(res)
+        output(res)
 
 @command("help", "Show help")
 def help_command():
@@ -41,6 +41,10 @@ def help_command():
 def flags_command():
     output("\n".join(map(lambda x:"{name}({char}) - {text}".format(name=x.name, char=x.char, text=x.text), flags.flags.values())))
 
+@command("resetconfig", "reset the config file")
+def reset_config():
+    command_config.reset_config()
+    print("config reset, restart the program")
 @command("commands", "show commands")
 def flags_command():
     output("\n".join(map(lambda x:"{regex} - {text}".format(regex=x[1], text=x[2]), commands)))
@@ -52,3 +56,5 @@ def parse_command(line):
             return True
     return False
 
+
+from . import command
