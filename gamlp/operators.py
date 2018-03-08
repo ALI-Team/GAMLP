@@ -4,6 +4,7 @@ from . import intnode
 import itertools
 import copy
 from . import latex
+from . import util
 
 # issubclass
 
@@ -223,18 +224,31 @@ class PowNode(OperatorNode):
     def simplifyed(self):
         if self.get_int_value() != None:
             return self.get_int_value()
-        if isinstance(self.left, unitnode.UnitNode):
-            return unitnode.UnitNode(copy.deepcopy(self.left.unit)**copy.deepcopy(self.right), copy.deepcopy(self.left.value)**copy.deepcopy(self.right)).simplifyed()
-        elif isinstance(self.left, MulNode):
-            return MulNode(*list(map(lambda x:x**copy.deepcopy(self.right),copy.deepcopy(self.left.terms)))).simplifyed()
+        if self.right.get_int_value()==0:
+            return intnode.IntNode(1)
+        left=self.left.simplifyed()
+        right=self.right.simplifyed()
+        if isinstance(left, unitnode.UnitNode):
+            return unitnode.UnitNode(copy.deepcopy(left.unit)**copy.deepcopy(right), copy.deepcopy(left.value)**copy.deepcopy(right)).simplifyed()
+        elif isinstance(left, MulNode):
+            return MulNode(*list(map(lambda x:x**copy.deepcopy(self.right),copy.deepcopy(left.terms)))).simplifyed()
 
-        elif isinstance(self.left, AddNode):
+        elif isinstance(left, AddNode) and right.get_int_value()!=None:
+            if len(left.terms)==0:
+                return intnode.IntNode(0)
             def simplify_addnode(a,b):
-                return AddNode(a**intnode.IntNode(2),b**intnode.IntNode(2),a*b*intnode.IntNode(2)).simplifyed()
-            return functools.reduce(simplify_addnode,self.left.terms)
+                #ISSUE HERE
+                #return AddNode(a**intnode.IntNode(2),b**intnode.IntNode(2),a*b*intnode.IntNode(2)).simplifyed()
+                return AddNode(*map(lambda k:intnode.IntNode(util.ncr(n,k))*a**(intnode.IntNode(n)-intnode.IntNode(k))*b**intnode.IntNode(k),range(n+1))).simplifyed()
+
+            n=right.eval()
+            if n>1:
+                #print(left.terms)
+                #print(n)
+                return functools.reduce(simplify_addnode,left.terms)
             #ERROR HERE
             #return AddNode(*list(map(lambda x:x**copy.deepcopy(self.right).simplifyed(),copy.deepcopy(self.left.terms)))).simplifyed()
-        return PowNode(self.left.simplifyed(), self.right.simplifyed()) 
+        return PowNode(left, right) 
 
     def get_children(self):
         return [self.left, self.right]
