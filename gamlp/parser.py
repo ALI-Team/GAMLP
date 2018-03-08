@@ -12,6 +12,7 @@ from . import equation
 class LibLexer(Lexer):
 
     INTEGER = TokenDef(r'\d+')
+    FLOAT = TokenDef(r'(?:\d+)?\.\d+')
 
     LPAREN = TokenDef(r'\(')
     RPAREN = TokenDef(r'\)')
@@ -76,6 +77,10 @@ class LibParser(Parser):
     @attach('e : INTEGER')
     def number(self, num):
         return IntNode(int(num))
+
+    @attach('e : FLOAT')
+    def number(self, num):
+        return IntNode(float(num))
 
     @attach('e : VAR')
     def variable(self, name):
