@@ -79,7 +79,7 @@ class LibParser(Parser):
         return IntNode(int(num))
 
     @attach('e : FLOAT')
-    def number(self, num):
+    def float(self, num):
         return IntNode(float(num))
 
     @attach('e : VAR')
