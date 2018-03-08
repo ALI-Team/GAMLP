@@ -41,10 +41,18 @@ class Equation(Node):
                 if not term.contains_unknowns():
                     self.constant+=term.eval()
                 elif isinstance(term, unitnode.UnitNode):
+                    if term.value.contains_unknowns():
+                        print("Unknowns in value of unitnode in eq solver equation.py WTF")
+                        raise ValueError
+                    amount=term.value.eval()
                     if isinstance(term.unit, varnode.VarNode):
-                        add_unknown(term.unit.name,1,term.value.n)
+                        add_unknown(term.unit.name,1,amount)
                     elif isinstance(term.unit, operators.PowNode):
-                        add_unknown(term.unit.left.name,term.unit.right.n,term.value.n)
+                        if term.unit.right.contains_unknowns():
+                            print("Var in exp not supported")
+                            raise ValueError
+
+                        add_unknown(term.unit.left.name,term.unit.right.eval(),amount)
         else:
             print("UNSUPPORTED WITH A * NODE IN EQ")
             raise NotImplemented

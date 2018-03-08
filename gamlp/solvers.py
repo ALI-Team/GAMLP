@@ -8,19 +8,17 @@ class Solver:
             return f
         return decorator
     def solve(self, equation):
-        #print("running solver")
-        method=self.find_method(grade=equation.grade)
-        if method==None:
+        for method in self.methods:
+            if method.matches(equation.grade):
+                ans=method.function(equation)
+                if ans==None:
+                    continue
+                return Solutions(equation.unknown,ans)
+
+        else:
             print("NO METHOD FOUND")
             raise ValueError
-        #print(method.function)
-        return Solutions(equation.unknown,method.function(equation))
 
-    def find_method(self, grade=None):
-        for method in self.methods:
-            if method.matches(grade):
-                return method
-        return None
 
 class Solutions:
     def __init__(self, unknown, solutions):
@@ -41,7 +39,7 @@ class Method:
         self.grade=grade
         self.function=function
     def matches(self, grade):
-        if self.grade==grade:
+        if self.grade==None or self.grade==grade:
             return True
         return False
     
