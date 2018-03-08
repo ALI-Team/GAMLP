@@ -38,14 +38,13 @@ class Equation(Node):
         if isinstance(self.node, operators.AddNode):
             self.constant=0
             for term in self.node.terms:
-                if isinstance(term, unitnode.UnitNode):
+                if not term.contains_unknowns():
+                    self.constant+=term.eval()
+                elif isinstance(term, unitnode.UnitNode):
                     if isinstance(term.unit, varnode.VarNode):
                         add_unknown(term.unit.name,1,term.value.n)
                     elif isinstance(term.unit, operators.PowNode):
                         add_unknown(term.unit.left.name,term.unit.right.n,term.value.n)
-
-                if isinstance(term, intnode.IntNode):
-                    self.constant=term.n
         else:
             print("UNSUPPORTED WITH A * NODE IN EQ")
             raise NotImplemented
