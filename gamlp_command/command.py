@@ -50,3 +50,5 @@ def execute():
                     f.write(dot.dot_code(tree, debug=flags.get("debug", False)))
             if flags.get("b"):
                 os.system("dot -Tpng > {png} < {dot}".format(png=png_path, dot=dot_path))
+            if flags.get("f"):
+                os.system("feh {png}".format(png=png_path))

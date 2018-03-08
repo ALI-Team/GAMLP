@@ -35,5 +35,6 @@ Flag("d","dot","Generate a .dot in /tmp/dot.dot for the output node", False)
 Flag("b","builddot","Build the dot file and place it in currect dir as dot.png", False)
 Flag("s","simplify","Simplify input",True)
 Flag("l","latex","Output in latex",False)
+Flag("f","feh","Open outputed dot image with feh",False)
 
 flag_state={}
