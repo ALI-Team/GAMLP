@@ -50,7 +50,7 @@ class Equation(Node):
                     elif isinstance(term.unit, operators.PowNode):
                         if term.unit.right.contains_unknowns():
                             print("Var in exp not supported")
-                            raise ValueError
+                            raise ValueError 
 
                         add_unknown(term.unit.left.name,term.unit.right.eval(),amount)
         else:
