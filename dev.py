@@ -5,6 +5,7 @@ from gamlp.variable import var
 from gamlp.equation import Equation
 from gamlp.solvers import solver
 from gamlp.operators import *
+from gamlp import parser
 i=IntNode
 v=var
 
@@ -43,6 +44,8 @@ def gdot(tree):
 
 
 #gdot((v("a")*v("b")*v("c")*i(3)*i(5)))
-gdot((v("a")*v("b")*v("c")*i(3)*i(5)).simplifyed())
+#gdot((v("a")*v("b")*v("c")*i(3)*i(5)).simplifyed())
 #gdot(((v("a")*v("b")*v("c")).simplifyed()*(i(3)*i(5))))
 #gdot((v("a")*v("b")*v("c")).simplifyed())
+
+parser.parse("((x-3)*(x+2))/(2*x-6)").simplifyed()

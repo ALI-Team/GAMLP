@@ -101,7 +101,8 @@ class MulNode(HomogenOperator):
                 if term.unit.eq(node.unit):
                     return unitnode.UnitNode(PowNode(term.unit,intnode.IntNode(2)), (term.value*node.value).simplifyed())
                 else:
-                    return unitnode.UnitNode((term.unit*node.unit).simplifyed(), (term.value*node.value).simplifyed())
+                    pass
+                    #return unitnode.UnitNode((term.unit*node.unit).simplifyed(), (term.value*node.value).simplifyed())
             else:
                 if isinstance(term, unitnode.UnitNode):
                     unit_node=term
@@ -111,7 +112,7 @@ class MulNode(HomogenOperator):
                     other_node=term
                 else:
                     raise ValueError("um dafuq")
-                return_val=unitnode.UnitNode(unit_node.unit, (unit_node.value*other_node).simplifyed())
+                return_val=unitnode.UnitNode(unit_node.unit, (unit_node.value*other_node)).simplifyed()
                 return return_val
         if isinstance(term, PowNode) or isinstance(node, PowNode):
             if isinstance(term, PowNode):
@@ -134,16 +135,23 @@ class MulNode(HomogenOperator):
             add_nodes=[]
             other=MulNode()
             for term in node.terms:
+                term_int_val=term.get_int_value()
+                if  term_int_val != None and term_int_val.eq(intnode.IntNode(1)):
+                    continue
                 if isinstance(term, AddNode):
                     add_nodes.append(term.terms)
                 elif isinstance(term, SubNode):
-                    add_nodes.append([term.left, term.right*intnode.IntNode(-1)])
+                    add_nodes.extend([term.left, term.right*intnode.IntNode(-1)])
                 else:
                     other.merge_in(term)
             resulting_node=AddNode()
             for selection in itertools.product(*add_nodes):
                 resulting_node.merge_in(MulNode(*other.terms,*selection))
             if len(resulting_node.terms)==1:
+                if issubclass(resulting_node.terms[0].__class__,HomogenOperator) and len(resulting_node.terms[0].terms)==1:
+                    return resulting_node.terms[0].terms[0]
+
+                    
                 return resulting_node.terms[0]
             return resulting_node.simplifyed()
 
@@ -234,7 +242,7 @@ class PowNode(OperatorNode):
         return self.left.eval()**self.right.eval()
 
     def formatted(self):
-        return "({}^{})".format(self.left, self.right)
+        return "(({})^({}))".format(self.left, self.right)
 
     def contains(self, value):
         return True in [self.left.contains(value), self.right.contains(value)]
@@ -266,13 +274,18 @@ class PowNode(OperatorNode):
                 return functools.reduce(simplify_addnode,left.terms).simplifyed()
             #ERROR HERE
             #return AddNode(*list(map(lambda x:x**copy.deepcopy(self.right).simplifyed(),copy.deepcopy(self.left.terms)))).simplifyed()
+        right_value=self.right.get_int_value()
+        if right_value.eq(intnode.IntNode(1)):
+            return self.left.simplifyed()
+        elif right_value.eq(intnode.IntNode(0)):
+            return intnode.IntNode(1)
         return PowNode(left, right) 
 
     def get_children(self):
         return [self.left, self.right]
 
     def latex(self):
-        return "{}^{}".format(self.left.latex(),self.right.latex())
+        return "{{{}}}^{{{}}}".format(self.left.latex(),self.right.latex())
     def label(self, debug=False):
         return "^"
     def child_labels(self, amount=1):

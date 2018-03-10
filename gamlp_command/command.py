@@ -1,5 +1,6 @@
 import os
 import re
+import logging
 
 from gamlp.parser import parse
 from gamlp import dot
@@ -55,7 +56,8 @@ def execute():
                     tree=tree.simplifyed()
                 except Exception as e:
                     print(e)
-                    print("Error in simplifying")
+                    logging.getLogger().error("Error in simplifying", exc_info=True)
+                    #print("Error in simplifying")
                     continue
             if flags.get("e") and isinstance(tree, equation.Equation):
                 try:
@@ -71,7 +73,7 @@ def execute():
                     output(tree)
                 if flags.get("d") or flags.get("b"):
                     with open(dot_path, "w") as f:
-                        if flags.get("l"):
+                        if flags.get("c"):
                             if flags.get("x",False):
                                 child_label_amount=2
                             else:

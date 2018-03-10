@@ -6,7 +6,10 @@ def separate(node):
     terms=[]
     for term in term_list:
         simplifyed_term=term.simplifyed()
-        if isinstance(simplifyed_term, node.__class__):
+        int_val=simplifyed_term.get_int_value()
+        if int_val != None:
+            numbers.append(int_val.n)
+        elif isinstance(simplifyed_term, node.__class__):
             term_list.extend(simplifyed_term.terms)
         elif isinstance(simplifyed_term, intnode.IntNode):
             numbers.append(simplifyed_term.n)

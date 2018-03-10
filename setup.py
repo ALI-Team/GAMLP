@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 setup(
     name="GAMLP",
-    version="0.2.6.4.9",
+    version="0.2.6.12.1",
     packages=find_packages(),
     scripts=["bin/gamlp"],
     package_data={

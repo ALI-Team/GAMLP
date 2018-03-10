@@ -14,10 +14,16 @@ class UnitNode(node.Node):
         return hash(str(self.unit.hash_node())+str(self.value.hash_node())+"u")
         
     def simplifyed(self):
-        if self.value.contains(self.unit):
-            return (copy.deepcopy(self.value)*copy.deepcopy(UnitNode(self.unit, intnode.IntNode(1)))).simplifyed()
-        else:
-            return UnitNode(self.unit.simplifyed(), self.value.simplifyed())
+        if not self.unit.contains_unknowns():
+            return operators.MulNode(self.unit,self.value).simplifyed()
+        value_int_val=self.value.get_int_value()
+        if value_int_val != None and value_int_val.eq(intnode.IntNode(0)):
+            return intnode.IntNode(0)
+        #if self.value.contains(self.unit):
+        #    return (copy.deepcopy(self.value)*copy.deepcopy(UnitNode(self.unit, intnode.IntNode(1)))).simplifyed()
+        if self.value.eq(self.unit):
+            return UnitNode(operators.PowNode(self.unit.simplifyed(),2), intnode.IntNode(1))
+        return UnitNode(self.unit.simplifyed(), self.value.simplifyed())
     def formatted(self):
         if isinstance(self.unit, VarNode):
             return "({}){}".format(self.value, self.unit)
@@ -26,8 +32,8 @@ class UnitNode(node.Node):
             
 
     def eval(self):
-        raise ValueError("Cant eval with variables")
-        #return self.value*self.unit
+        #raise ValueError("Cant eval with variables")
+        return self.value.eval()*self.unit.eval()
 
     #def contains(self, value):
         #return True in [self.unit.contains(value), self.value.contains(value)]

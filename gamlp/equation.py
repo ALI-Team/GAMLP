@@ -24,6 +24,12 @@ class Equation(Node):
     def label(self, debug=False):
         return "="
 
+    def child_labels(self, amount=1):
+        if amount > 1:
+            return ["Left","Right"]
+        else:
+            return None
+
     def get_children(self):
         return [self.left, self.right]
         
