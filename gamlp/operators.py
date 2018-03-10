@@ -50,6 +50,13 @@ class HomogenOperator(OperatorNode):
 
     def label(self, debug=False):
         return self.symbol
+
+    def child_labels(self, amount=1):
+        if amount > 1:
+            return "Term"
+        else:
+            return None
+        
     
 class AddNode(HomogenOperator):
     def __init__(self, *terms):
@@ -175,6 +182,11 @@ class SubNode(OperatorNode):
 
     def label(self, debug=False):
         return "-"
+    def child_labels(self, amount=1):
+        if amount > 0:
+            return ["left","right"]
+        else:
+            return None
 
 class DivNode(OperatorNode):
     def __init__(self, left, right):
@@ -203,6 +215,12 @@ class DivNode(OperatorNode):
 
     def label(self, debug=False):
         return "/"
+
+    def child_labels(self, amount=1):
+        if amount > 0:
+            return ["Numerator","Denominator"]
+        else:
+            return None
     
 class PowNode(OperatorNode):
     def __init__(self, left, right):
@@ -245,7 +263,7 @@ class PowNode(OperatorNode):
             if n>1:
                 #print(left.terms)
                 #print(n)
-                return functools.reduce(simplify_addnode,left.terms)
+                return functools.reduce(simplify_addnode,left.terms).simplifyed()
             #ERROR HERE
             #return AddNode(*list(map(lambda x:x**copy.deepcopy(self.right).simplifyed(),copy.deepcopy(self.left.terms)))).simplifyed()
         return PowNode(left, right) 
@@ -257,5 +275,10 @@ class PowNode(OperatorNode):
         return "{}^{}".format(self.left.latex(),self.right.latex())
     def label(self, debug=False):
         return "^"
+    def child_labels(self, amount=1):
+        if amount > 0:
+            return ["Base","Exponent"]
+        else:
+            return None
 from . import simplifyer
 from . import unitnode

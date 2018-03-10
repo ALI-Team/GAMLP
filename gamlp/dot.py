@@ -3,7 +3,7 @@ from . import operatornode
 from . import unitnode
 from . import intnode
 from . import equation
-def dot_code(tree, debug=False):
+def dot_code(tree, debug=False, child_label_amount=1):
     edges=[]
     def build_edge_list(node):
         nonlocal edges
@@ -13,17 +13,30 @@ def dot_code(tree, debug=False):
         children=node.get_children()
         if children==None:
             return
-        for child in children:
+        child_labels=node.child_labels(amount=child_label_amount)
+        have_child_labels = not child_labels==None
+        if have_child_labels and isinstance(child_labels, str):
+            individual_child_labels=False
+        else:
+            individual_child_labels=True
+        for i,child in enumerate(children):
+            if have_child_labels:
+                if individual_child_labels:
+                    child_label=child_labels[i]
+                else:
+                    child_label=child_labels
+            else:
+                child_label=None
             if isinstance(child, unitnode.UnitNode) and child.value.eq(intnode.IntNode(1)):
-                #print("one unit")
-                edges.append((node,child.unit))
+
+                edges.append((node,child.unit, child_label))
                 build_edge_list(child.unit)
                 continue
-            edges.append((node,child))
+            edges.append((node,child,child_label))
             build_edge_list(child)
     build_edge_list(tree)
     nodes=set()
-    for f,t in edges:
+    for f,t,_ in edges:
         nodes.add(f)
         nodes.add(t)
     code=""
@@ -39,8 +52,14 @@ def dot_code(tree, debug=False):
         code+="{} [{}label=\"{}\"];\n".format(name, node_style,node.label(debug=debug))
         i=i+1
 
-    for f,t in edges:
-        code+="{} -- {};\n".format(f.dot_name,t.dot_name)
+    for f,t,child_label in edges:
+        child_label_code=""
+        if child_label != None:
+            child_label_code="label={} fontsize=9".format(child_label)
+        else:
+            child_label_code=""
+
+        code+="{} -- {}[{}];\n".format(f.dot_name,t.dot_name,child_label_code)
     
     return "graph tree {{\n{}}}".format(code) 
 digs="".join(map(chr,range(ord("a"),ord("z")+1)))

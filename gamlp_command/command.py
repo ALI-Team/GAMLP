@@ -71,7 +71,14 @@ def execute():
                     output(tree)
                 if flags.get("d") or flags.get("b"):
                     with open(dot_path, "w") as f:
-                        f.write(dot.dot_code(tree, debug=flags.get("debug", False)))
+                        if flags.get("l"):
+                            if flags.get("x",False):
+                                child_label_amount=2
+                            else:
+                                child_label_amount=1
+                        else:
+                            child_label_amount=0
+                        f.write(dot.dot_code(tree, debug=flags.get("x", False), child_label_amount=child_label_amount))
                 if flags.get("b"):
                     os.system("dot -Tpng > {png} < {dot}".format(png=png_path, dot=dot_path))
                 if flags.get("f"):

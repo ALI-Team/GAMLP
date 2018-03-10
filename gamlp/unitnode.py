@@ -41,3 +41,8 @@ class UnitNode(node.Node):
         if debug:
             return "Unit"
         return "×"
+    def child_labels(self, amount=1):
+        if amount > 1:
+            return ["Unit","Value"]
+        else:
+            return None

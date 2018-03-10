@@ -37,5 +37,7 @@ Flag("s","simplify","Simplify input",True)
 Flag("l","latex","Output in latex",False)
 Flag("f","feh","Open outputed dot image with feh",False)
 Flag("e","equation","Solve equations",True)
+Flag("x","debug","Debug",True)
+Flag("l","childlabel","Show childlabels in dot",False)
 
 flag_state={}

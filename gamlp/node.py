@@ -62,6 +62,9 @@ class Node:
     def label(self):
         raise NotImplementedError
 
+    def child_labels(self, amount=1):
+        return None
+
     def simplifyed(self):
         """Return a simplifyed clone of the node.
         """
