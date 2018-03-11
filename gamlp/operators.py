@@ -290,7 +290,7 @@ class PowNode(OperatorNode):
                         factor = PowNode(left.terms[i], intnode.IntNode(exponents[i]))
                         
                     factors.append(factor)
-                term = MulNode(*[multinomial_factor, *factors])
+                term = MulNode(*[multinomial_factor, *factors]).simplifyed()
                 result_terms.append(term)
             return AddNode(*result_terms)
                 
