@@ -259,21 +259,42 @@ class PowNode(OperatorNode):
         elif isinstance(left, MulNode):
             return MulNode(*list(map(lambda x:x**copy.deepcopy(self.right),copy.deepcopy(left.terms)))).simplifyed()
 
-        elif isinstance(left, AddNode) and right.get_int_value()!=None:
-            if len(left.terms)==0:
+        elif isinstance(left, AddNode) and right.get_int_value() != None:
+            l = len(left.terms)
+            exponent = right.get_int_value().n
+            if l == 0:
                 return intnode.IntNode(0)
-            def simplify_addnode(a,b):
-                #ISSUE HERE
-                #return AddNode(a**intnode.IntNode(2),b**intnode.IntNode(2),a*b*intnode.IntNode(2)).simplifyed()
-                return AddNode(*map(lambda k:intnode.IntNode(util.ncr(n,k))*a**(intnode.IntNode(n)-intnode.IntNode(k))*b**intnode.IntNode(k),range(n+1))).simplifyed()
+            
+            combs = itertools.combinations_with_replacement(range(l), exponent)
+            exp_factorial = util.factorial(exponent)
+            result_terms = []
+    
+            for comb in combs:
+                exponents = [0] * l
+                for factor in comb:
+                    exponents[factor] += 1
+            
+                denominator = 1
+                for exp in exponents:
+                    denominator *= util.factorial(exp)
 
-            n=right.eval()
-            if n>1:
-                #print(left.terms)
-                #print(n)
-                return functools.reduce(simplify_addnode,left.terms).simplifyed()
-            #ERROR HERE
-            #return AddNode(*list(map(lambda x:x**copy.deepcopy(self.right).simplifyed(),copy.deepcopy(self.left.terms)))).simplifyed()
+                multinomial_factor = intnode.IntNode(int(exp_factorial / denominator))
+                factors = []
+                for i in range(l):
+                    if exponents[i] == 0:
+                        continue
+                    
+                    if exponents[i] == 1:
+                        factor = left.terms[i]
+                    else:
+                        factor = PowNode(left.terms[i], intnode.IntNode(exponents[i]))
+                        
+                    factors.append(factor)
+                term = MulNode(*[multinomial_factor, *factors])
+                result_terms.append(term)
+            return AddNode(*result_terms)
+                
+            
         right_value=self.right.get_int_value()
         if right_value.eq(intnode.IntNode(1)):
             return self.left.simplifyed()
