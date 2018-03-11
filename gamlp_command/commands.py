@@ -20,10 +20,10 @@ def set(flag,val):
 def exit():
     command.go=False
 
-@command("flag ([a-z]+)", "Set multiple flags to True")
-def flag_command(f):
+@command("flag ([a-z]+)(?: (on|off))?", "Set multiple flags")
+def flag_command(f,s):
     for c in f:
-        flags.set(c,True)
+        flags.set(c,s!="off")
 
 @command("get ([a-z]+)", "Get value of flag")
 def flag_command(f):
