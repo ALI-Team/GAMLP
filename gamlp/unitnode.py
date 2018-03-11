@@ -14,8 +14,8 @@ class UnitNode(node.Node):
         return hash(str(self.unit.hash_node())+str(self.value.hash_node())+"u")
         
     def simplifyed(self):
-        if not self.unit.contains_unknowns():
-            return operators.MulNode(self.unit,self.value).simplifyed()
+        #if not self.unit.contains_unknowns():
+            #return operators.MulNode(self.unit,self.value).simplifyed()
         value_int_val=self.value.get_int_value()
         if value_int_val != None and value_int_val.eq(intnode.IntNode(0)):
             return intnode.IntNode(0)

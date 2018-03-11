@@ -1,3 +1,5 @@
+import re
+
 from purplex import Lexer, TokenDef
 from purplex import Parser, attach
 from purplex import LEFT, RIGHT
@@ -7,6 +9,8 @@ from .operators import *
 from .intnode import IntNode
 from .variable import var
 from . import equation
+from .unitnode import UnitNode
+from .varnode import VarNode
 
 
 class LibLexer(Lexer):
@@ -26,6 +30,7 @@ class LibLexer(Lexer):
     EQ = TokenDef(r'=')
 
     VAR = TokenDef(r'[a-zA-Z]+')
+    UNIT = TokenDef(r'[0-9]+[a-zA-Z]+')
 
     WHITESPACE = TokenDef(r'[\s\n]+', ignore=True)
 
@@ -85,6 +90,10 @@ class LibParser(Parser):
     @attach('e : VAR')
     def variable(self, name):
         return var(name)
+    @attach('e : UNIT')
+    def variable(self, unit):
+        match=re.match("([0-9]+)([a-z]+)",unit)
+        return UnitNode(VarNode(match.group(2)),IntNode(int(match.group(1))))
 
     @attach('e : e EQ e')
     def eq(self, left, eq, right):
