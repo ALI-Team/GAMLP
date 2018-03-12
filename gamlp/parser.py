@@ -91,7 +91,7 @@ class LibParser(Parser):
     def variable(self, name):
         return var(name)
     @attach('e : UNIT')
-    def variable(self, unit):
+    def unit(self, unit):
         match=re.match("([0-9]+)([a-z]+)",unit)
         return UnitNode(VarNode(match.group(2)),IntNode(int(match.group(1))))
 

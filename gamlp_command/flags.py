@@ -39,5 +39,6 @@ Flag("f","feh","Open outputed dot image with feh",False)
 Flag("e","equation","Solve equations",True)
 Flag("x","debug","Debug",True)
 Flag("c","childlabel","Show childlabels in dot",False)
+Flag("h","horizontal","Horizontal dot files",False)
 
 flag_state={}

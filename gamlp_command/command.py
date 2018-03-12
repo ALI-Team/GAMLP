@@ -80,7 +80,7 @@ def execute():
                                 child_label_amount=1
                         else:
                             child_label_amount=0
-                        f.write(dot.dot_code(tree, debug=flags.get("x", False), child_label_amount=child_label_amount))
+                        f.write(dot.dot_code(tree, debug=flags.get("x", False), child_label_amount=child_label_amount, direction=["V","H"][flags.get("h",False)]))
                 if flags.get("b"):
                     os.system("dot -Tpng > {png} < {dot}".format(png=png_path, dot=dot_path))
                 if flags.get("f"):

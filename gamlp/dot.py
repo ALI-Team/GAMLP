@@ -3,15 +3,17 @@ from . import operatornode
 from . import unitnode
 from . import intnode
 from . import equation
-def dot_code(tree, debug=False, child_label_amount=1):
+def dot_code(tree, debug=False, child_label_amount=1, direction="V"):
     edges=[]
     def build_edge_list(node):
         nonlocal edges
+        #nonlocal nodes
 
         if isinstance(node, unitnode.UnitNode) and node.value.eq(intnode.IntNode(1)):
             node=node.unit
         children=node.get_children()
         if children==None:
+            nodes.add(node)
             return
         child_labels=node.child_labels(amount=child_label_amount)
         have_child_labels = not child_labels==None
@@ -19,6 +21,7 @@ def dot_code(tree, debug=False, child_label_amount=1):
             individual_child_labels=False
         else:
             individual_child_labels=True
+        nodes.add(node)
         for i,child in enumerate(children):
             if have_child_labels:
                 if individual_child_labels:
@@ -34,12 +37,17 @@ def dot_code(tree, debug=False, child_label_amount=1):
                 continue
             edges.append((node,child,child_label))
             build_edge_list(child)
-    build_edge_list(tree)
     nodes=set()
+    build_edge_list(tree)
+    
+    #if len(edges) == 0:
+    #    nodes.add(tree)
     for f,t,_ in edges:
         nodes.add(f)
         nodes.add(t)
     code=""
+    if direction == "H":
+        code+="rankdir=\"LR\";\n"
     i=0
     for node in nodes:
         name=int2base(i, len(digs))
