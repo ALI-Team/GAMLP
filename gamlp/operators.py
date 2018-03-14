@@ -70,7 +70,7 @@ class AddNode(HomogenOperator):
             return intnode.IntNode(term.n+node.n)
         if isinstance(node, unitnode.UnitNode) and isinstance(term, unitnode.UnitNode):
             if node.unit.eq(term.unit):
-                return unitnode.UnitNode(term.unit, (node.value+term.value).simplifyed())
+                return unitnode.UnitNode(term.unit, (node.value+term.value)).simplifyed()
         return None
 
     def simplifyed(self):

@@ -112,9 +112,6 @@ class Node:
             return intnode.IntNode(int(value))
         return None
 
-        
-
-
 from .operators import *
 from . import intnode
 from .equation import Equation

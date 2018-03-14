@@ -1,0 +1,34 @@
+graph gamlp {
+  node [shape=box fontsize=18];
+  BaseNode [label="Nod"];
+  IntNode [label="Nummernod"];
+  UnitNode [label="Enhetsnod"];
+  VarNode [label="Variabelnod"];
+  Equation [label="Ekvation"];
+  HomogenOperator [label="Homogen operatörsnod"];
+  OperatorNode [label="Operatörsnod"];
+  AddNode [label="Additionsnod"];
+  MulNode [label="Multiplikationsnod"];
+  SubNode [label="Subtraktionsnod"];
+  DivNode [label="Divisionsnod"];
+  PowNode [label="Potensnod"];
+
+  BaseNode -- IntNode;
+  BaseNode -- UnitNode;
+  BaseNode -- VarNode;
+  BaseNode -- Equation;
+  BaseNode -- OperatorNode;
+
+  OperatorNode -- HomogenOperator;
+  HomogenOperator -- AddNode;
+  HomogenOperator -- MulNode;
+
+  OperatorNode -- SubNode;
+  OperatorNode -- DivNode;
+  OperatorNode -- PowNode;
+
+  
+  
+  
+
+}
