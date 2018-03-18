@@ -4,6 +4,10 @@ import math
 def pq_solver(equation):
     #UGLY AF
     exps=equation.exponents
+
+    if not 1 in exps:
+        return None
+    
     sqrt_part=math.sqrt(exps[1]**2-(4*exps[2]*exps[0]))
     eq=lambda x:(-exps[1]+x)/(2*exps[2])
     return [eq(sqrt_part), eq(-sqrt_part)]
@@ -19,7 +23,7 @@ def grade_one_solver(equation):
 @solver.method(grade=None)
 def easy_exp_solver(equation):
     exps = equation.exponents
-
+    
     exponent = 0
     coefficient = 0
 
@@ -37,5 +41,5 @@ def easy_exp_solver(equation):
             
     if exponent == 0 or coefficient < 0:
         return None
-
+    
     return [((-otherval/coefficient)**(1/exponent))]
