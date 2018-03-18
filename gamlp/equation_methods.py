@@ -6,7 +6,7 @@ def pq_solver(equation):
     exps=equation.exponents
 
     if not 1 in exps:
-        return None
+        exps[1] = 0
     
     sqrt_part=math.sqrt(exps[1]**2-(4*exps[2]*exps[0]))
     eq=lambda x:(-exps[1]+x)/(2*exps[2])
