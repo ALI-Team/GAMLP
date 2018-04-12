@@ -264,6 +264,9 @@ class PowNode(OperatorNode):
             exponent = right.get_int_value().n
             if l == 0:
                 return intnode.IntNode(0)
+
+            if exponent < 0:
+                return PowNode(left, right) 
             
             combs = itertools.combinations_with_replacement(range(l), exponent)
             exp_factorial = util.factorial(exponent)

@@ -6,6 +6,8 @@ from gamlp.parser import parse
 from gamlp import dot
 from gamlp import equation
 import purplex
+from PIL import Image
+import PIL.ImageOps 
 
 from . import flags
 from . import commands
@@ -83,5 +85,19 @@ def execute():
                         f.write(dot.dot_code(tree, debug=flags.get("x", False), child_label_amount=child_label_amount, direction=["V","H"][flags.get("h",False)]))
                 if flags.get("b"):
                     os.system("dot -Tpng > {png} < {dot}".format(png=png_path, dot=dot_path))
+                    if flags.get("p"):
+                        image = Image.open(png_path)
+                        image = image.convert("RGBA")
+                        img_data = image.getdata()
+                        new_img_data = []
+                        for item in img_data:
+                            color=(255-item[0])
+                            new_img_data.append((255, 255, 255, color))
+
+                        image.putdata(new_img_data)
+
+                        image.save(png_path)
+
+
                 if flags.get("f"):
                     os.system("feh {png}".format(png=png_path))

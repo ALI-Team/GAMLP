@@ -40,5 +40,6 @@ Flag("e","equation","Solve equations",True)
 Flag("x","debug","Debug",True)
 Flag("c","childlabel","Show childlabels in dot",False)
 Flag("h","horizontal","Horizontal dot files",False)
+Flag("p","presentation","Make rendered images white with transparent background",False)
 
 flag_state={}
