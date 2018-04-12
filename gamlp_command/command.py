@@ -5,6 +5,7 @@ import logging
 from gamlp.parser import parse
 from gamlp import dot
 from gamlp import equation
+from gamlp import intnode
 import purplex
 from PIL import Image
 import PIL.ImageOps 
@@ -61,6 +62,9 @@ def execute():
                     logging.getLogger().error("Error in simplifying", exc_info=True)
                     #print("Error in simplifying")
                     continue
+
+            if flags.get("n") and not tree.contains_unknowns():
+                tree=intnode.IntNode(tree.eval())
             if flags.get("e") and isinstance(tree, equation.Equation):
                 try:
                     print(tree.solve())
