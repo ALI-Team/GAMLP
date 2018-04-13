@@ -20,9 +20,8 @@ class HomogenOperator(OperatorNode):
 
         return hash(str(terms_hash) + str(hash(self.symbol)))
         
-    def formatted(self):
-        #print(self.terms)
-        return "("+self.symbol.join(map(lambda x:x.formatted(), self.terms))+")"
+    def formatted(self, parent):
+        return util.parentheses(self,parent,self.symbol.join(map(lambda x:x.formatted(self), self.terms)))
 
     def merge_in(self, *nodes):
         for node in nodes:
@@ -61,6 +60,7 @@ class HomogenOperator(OperatorNode):
 class AddNode(HomogenOperator):
     def __init__(self, *terms):
         super().__init__("+", *terms)
+        self.priority=1
 
     def eval(self):
         return functools.reduce(lambda x,y:x+y, map(lambda z:z.eval(), self.terms))
@@ -91,6 +91,7 @@ class AddNode(HomogenOperator):
 class MulNode(HomogenOperator):
     def __init__(self, *terms):
         super().__init__("*", *terms)
+        self.priority=2
 
     def eval(self):
         return functools.reduce(lambda x,y:x*y, map(lambda z:z.eval(), self.terms))
@@ -165,6 +166,7 @@ class SubNode(OperatorNode):
     def __init__(self, left, right):
         self.left=left
         self.right=right
+        self.priority=1
 
     def hash_node(self):
         return hash(str(str(self.left.hash_node())+str(self.right.hash_node())+str(hash("-"))))
@@ -172,8 +174,8 @@ class SubNode(OperatorNode):
     def eval(self):
         return self.left.eval()-self.right.eval()
 
-    def formatted(self):
-        return "({}-{})".format(self.left, self.right)
+    def formatted(self, parent):
+        return util.parentheses(self,parent,"{}-{}".format(self.left.formatted(self), self.right.formatted(self)))
 
     def simplifyed(self):
         if self.get_int_value()!=None:
@@ -200,6 +202,7 @@ class DivNode(OperatorNode):
     def __init__(self, left, right):
         self.left=left
         self.right=right
+        self.priority=2
 
     def hash_node(self):
         return hash(str(str(self.left.hash_node())+str(self.right.hash_node())+str(hash("/"))))
@@ -207,8 +210,8 @@ class DivNode(OperatorNode):
     def eval(self):
         return self.left.eval()/self.right.eval()
 
-    def formatted(self):
-        return "({}/{})".format(self.left, self.right)
+    def formatted(self, parent):
+        return util.parentheses(self,parent,"{}/{}".format(self.left.formatted(self), self.right.formatted(self)))
     
     def get_children(self):
         return [self.left, self.right]
@@ -234,6 +237,7 @@ class PowNode(OperatorNode):
     def __init__(self, left, right):
         self.left=left
         self.right=right
+        self.priority=3
 
     def hash_node(self):
         return hash(str(str(self.left.hash_node())+str(self.right.hash_node())+str(hash("^"))))
@@ -241,8 +245,8 @@ class PowNode(OperatorNode):
     def eval(self):
         return self.left.eval()**self.right.eval()
 
-    def formatted(self):
-        return "(({})^({}))".format(self.left, self.right)
+    def formatted(self, parent):
+        return util.parentheses(self,parent,"{}^{}".format(self.left.formatted(self), self.right.formatted(self)))
 
     def contains(self, value):
         return True in [self.left.contains(value), self.right.contains(value)]

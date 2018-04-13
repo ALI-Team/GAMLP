@@ -9,6 +9,7 @@ class Equation(Node):
     def __init__(self, left, right):
         self.left=left
         self.right=right
+        self.priority=0
 
     def simplifyed(self):
         return Equation((self.left-self.right).simplifyed(),intnode.IntNode(0))
@@ -18,9 +19,9 @@ class Equation(Node):
         return solvers.solver.solve(self)
 
     
-    def formatted(self):
+    def formatted(self, parent):
         #print(self.terms)
-        return "{}={}".format(self.left.formatted(), self.right.formatted())
+        return "{}={}".format(self.left.formatted(self), self.right.formatted(self))
     def label(self, debug=False):
         return "="
 
