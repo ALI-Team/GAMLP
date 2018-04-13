@@ -28,6 +28,9 @@ class UnitNode(node.Node):
     def formatted(self, parent):
         if self.value.get_int_value().eq(intnode.IntNode(1)):
             return self.unit.formatted(self)
+        if self.value.get_int_value().eq(intnode.IntNode(-1)):
+            return "-"+self.unit.formatted(self)
+
         #if isinstance(self.unit, VarNode):
         return "{}{}".format(self.value.formatted(self), self.unit.formatted(self))
         #else:
