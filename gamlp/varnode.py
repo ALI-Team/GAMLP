@@ -25,7 +25,7 @@ class VarNode(Node):
     def simplifyed(self):
         return self
 
-    def formatted(self):
+    def formatted(self, parent):
         return self.name
 
     def contains(self, value):

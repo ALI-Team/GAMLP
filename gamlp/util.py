@@ -12,3 +12,10 @@ def factorial(n):
     for i in range(1, n + 1):
         f *= i
     return f
+
+
+def parentheses(node, parent, pattern):
+    if parent == None or parent.priority < node.priority:
+        return pattern
+    else:
+        return "("+pattern+")"

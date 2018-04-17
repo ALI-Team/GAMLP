@@ -36,12 +36,12 @@ class Node:
     def __str__(self):
         """Calls node.formatted.
         """
-        return self.formatted()
+        return self.formatted(None)
 
     def __format__(self, format_spec):
         """Calls node.formatted.
         """
-        return self.formatted()
+        return self.formatted(None)
 
     def get_children(self):
         """Returns The children of a node returns node if no children.

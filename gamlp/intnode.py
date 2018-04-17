@@ -12,7 +12,7 @@ class IntNode(Node):
     def simplifyed(self):
         return self
         
-    def formatted(self):
+    def formatted(self, parent):
         return str(self.n)
 
     def contains(self, value):

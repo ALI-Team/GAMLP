@@ -9,6 +9,7 @@ class UnitNode(node.Node):
         self.value=value
         self.unit=unit
         super().__init__()
+        self.priority=2
 
     def hash_node(self):
         return hash(str(self.unit.hash_node())+str(self.value.hash_node())+"u")
@@ -24,11 +25,16 @@ class UnitNode(node.Node):
         if self.value.eq(self.unit):
             return UnitNode(operators.PowNode(self.unit.simplifyed(),2), intnode.IntNode(1))
         return UnitNode(self.unit.simplifyed(), self.value.simplifyed())
-    def formatted(self):
-        if isinstance(self.unit, VarNode):
-            return "({}){}".format(self.value, self.unit)
-        else:
-            return "({})({})".format(self.value, self.unit)
+    def formatted(self, parent):
+        if self.value.get_int_value().eq(intnode.IntNode(1)):
+            return self.unit.formatted(self)
+        if self.value.get_int_value().eq(intnode.IntNode(-1)):
+            return "-"+self.unit.formatted(self)
+
+        #if isinstance(self.unit, VarNode):
+        return "{}{}".format(self.value.formatted(self), self.unit.formatted(self))
+        #else:
+            #return "({})({})".format(self.value.formatted(self), self.unit.formatted(self))
             
 
     def eval(self):
