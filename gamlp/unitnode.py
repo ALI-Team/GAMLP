@@ -26,9 +26,10 @@ class UnitNode(node.Node):
             return UnitNode(operators.PowNode(self.unit.simplifyed(),2), intnode.IntNode(1))
         return UnitNode(self.unit.simplifyed(), self.value.simplifyed())
     def formatted(self, parent):
-        if self.value.get_int_value().eq(intnode.IntNode(1)):
+        int_value=self.value.get_int_value()
+        if int_value != None and int_value.eq(intnode.IntNode(1)):
             return self.unit.formatted(self)
-        if self.value.get_int_value().eq(intnode.IntNode(-1)):
+        if int_value != None and int_value.eq(intnode.IntNode(-1)):
             return "-"+self.unit.formatted(self)
 
         #if isinstance(self.unit, VarNode):
