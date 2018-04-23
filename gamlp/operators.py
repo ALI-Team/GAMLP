@@ -78,8 +78,9 @@ class AddNode(HomogenOperator):
             return self.get_int_value()
         term=simplifyer.simplify_homogen(self, target=target, context=context)
         if isinstance(term,AddNode):
-            if len(term.terms)==1:
-                return term.terms[0]
+            if len(list(filter(lambda x:x==None or (not x.eq(intnode.IntNode(0))),map(lambda x:x.get_int_value(),term.terms))))==1:
+                #Only non 0 element
+                return list(filter(lambda x:x[1]==None or (not x[1].eq(intnode.IntNode(0))),map(lambda x:(x,x.get_int_value()),term.terms)))[0][0]
         return term
 
     def latex(self):

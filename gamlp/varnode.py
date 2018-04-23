@@ -39,6 +39,9 @@ class VarNode(Node):
     def latex(self):
         return self.name
 
+    def unknowns(self):
+        return set([self.name])
+
     def label(self, debug=False):
 
         if self.is_constant and not debug:

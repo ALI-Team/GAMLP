@@ -23,6 +23,9 @@ class IntNode(Node):
     def get_children(self):
         return None
         
+    def unknowns(self):
+        return set()
+
     def contains_unknowns(self):
         return False
     

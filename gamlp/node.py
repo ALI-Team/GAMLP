@@ -1,4 +1,5 @@
 import copy
+import itertools
 
 
 class Node:
@@ -108,6 +109,10 @@ class Node:
             print("NODE WITHOUT A GET_CHILDEN MUST CONTAIN A contains")
             raise NotImplementedError
         return True in list(map(lambda x:x.contains(value),children))
+
+    def unknowns(self):
+        """Return a list of unknowns"""
+        return set().union(*map(lambda x:x.unknowns(),self.get_children()))
 
     def get_int_value(self):
         """Try to get a integer value of the node, if node is non integer or contains unknowns returns None.

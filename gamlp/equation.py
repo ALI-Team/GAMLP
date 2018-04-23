@@ -17,10 +17,13 @@ class Equation(Node):
     def solve(self):
         factor_node=self.clone()
         self.find_parts()
-        sol=solvers.solver.solve(self)
-        if sol != None:
-            return sol
+        if self.solvable_polynom and self.singel_unknown:
+            sol=solvers.solver.solve(self)
+            if sol != None:
+                return sol
         factor_sol=solvers.factor_solver(factor_node)
+        if factor_sol != None:
+            return factor_sol
 
 
     
@@ -51,27 +54,34 @@ class Equation(Node):
             self.unknowns[name][power]=value
         self.unknowns={}
         if isinstance(self.node, operators.AddNode):
-            self.constant=0
-            for term in self.node.terms:
-                if not term.contains_unknowns():
-                    self.constant+=term.eval()
-                elif isinstance(term, unitnode.UnitNode):
-                    if term.value.contains_unknowns():
-                        print("Unknowns in value of unitnode in eq solver equation.py WTF")
-                        raise ValueError
-                    amount=term.value.eval()
-                    if isinstance(term.unit, varnode.VarNode):
-                        add_unknown(term.unit.name,1,amount)
-                    elif isinstance(term.unit, operators.PowNode):
-                        if term.unit.right.contains_unknowns():
-                            print("Var in exp not supported")
-                            raise ValueError 
-
-                        add_unknown(term.unit.left.name,term.unit.right.eval(),amount)
+            terms=self.node.terms
         else:
-            print("UNSUPPORTED WITH A * NODE IN EQ")
-            raise NotImplementedError
+            terms=[self.node]
+
+        self.constant=0
+        self.solvable_polynom=True
+        for term in self.node.terms:
+            if not term.contains_unknowns():
+                self.constant+=term.eval()
+            elif isinstance(term, unitnode.UnitNode):
+                if term.value.contains_unknowns():
+                    print("Unknowns in value of unitnode in eq solver equation.py WTF")
+                    raise ValueError
+                amount=term.value.eval()
+                if isinstance(term.unit, varnode.VarNode):
+                    add_unknown(term.unit.name,1,amount)
+                elif isinstance(term.unit, operators.PowNode):
+                    if term.unit.right.contains_unknowns():
+                        print("Var in exp not supported")
+                        raise ValueError 
+
+                    add_unknown(term.unit.left.name,term.unit.right.eval(),amount)
+            else:
+                self.solvable_polynom=False
+        if not self.solvable_polynom:
+            return
         self.number_unknowns=len(self.unknowns)
+        self.singel_unknown=True
         if self.number_unknowns == 1:
             self.unknown=list(self.unknowns)[0]
             self.grade=max(self.unknowns[self.unknown])
@@ -79,11 +89,13 @@ class Equation(Node):
             self.exponents[0]=self.constant
         if self.number_unknowns > 1:
             print("UNSUPPORTED WITH MULIPLE UNKNOWNS")
-            raise NotImplementedError
+            self.singel_unknown=False
+            #raise NotImplementedError
 
         if self.number_unknowns == 0:
             print("UNSUPPORTED WITH NO UNKNOWNS")
-            raise ValueError
+            self.singel_unknown=False
+            #raise ValueError
                     
                         
 
