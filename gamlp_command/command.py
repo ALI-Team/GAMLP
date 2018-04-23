@@ -1,6 +1,7 @@
 import os
 import re
 import logging
+import copy
 
 from gamlp.parser import parse
 from gamlp import dot
@@ -47,6 +48,7 @@ def execute():
         if not res:
             try:
                 tree=parse(expr)
+                input_tree=copy.deepcopy(tree)
             except purplex.exception.NoMatchingTokenFoundError:
                 print("syntax error")
                 continue
@@ -56,7 +58,10 @@ def execute():
                 continue
             if flags.get("s"):
                 try:
-                    tree=tree.simplifyed()
+                    if flags.get("c"):
+                        tree=tree.simplifyed(target="FACTOR")
+                    else:
+                        tree=tree.simplifyed()
                 except Exception as e:
                     print(e)
                     logging.getLogger().error("Error in simplifying", exc_info=True)
@@ -67,7 +72,7 @@ def execute():
                 tree=intnode.IntNode(tree.eval())
             if flags.get("e") and isinstance(tree, equation.Equation):
                 try:
-                    print(tree.solve())
+                    print(input_tree.solve())
                 except Exception as e:
                     print(e)
                     print("Error in solving")

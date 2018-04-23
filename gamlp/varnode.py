@@ -22,7 +22,7 @@ class VarNode(Node):
     #def __eq__(self, other):
         #if isinstance(other, VarNode):
         #    return self.name==other.name
-    def simplifyed(self):
+    def simplifyed(self, target=None, context=None):
         return self
 
     def formatted(self, parent):

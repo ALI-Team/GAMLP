@@ -42,5 +42,6 @@ Flag("c","childlabel","Show childlabels in dot",False)
 Flag("h","horizontal","Horizontal dot files",False)
 Flag("p","presentation","Make rendered images white with transparent background",False)
 Flag("n","decimal","Always simplify to decimal number if possible",True)
+Flag("c","factor","use the FACTOR target",False)
 
 flag_state={}

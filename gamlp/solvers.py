@@ -16,8 +16,7 @@ class Solver:
                 return Solutions(equation.unknown,ans)
 
         else:
-            print("NO METHOD FOUND")
-            raise ValueError
+            return None
 
 
 class Solutions:
@@ -42,6 +41,10 @@ class Method:
         if self.grade==None or self.grade==grade:
             return True
         return False
+
+
+def factor_solver(tree):
+    pass
     
         
 solver=Solver()

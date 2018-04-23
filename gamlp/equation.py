@@ -11,12 +11,17 @@ class Equation(Node):
         self.right=right
         self.priority=0
 
-    def simplifyed(self):
-        return Equation((self.left-self.right).simplifyed(),intnode.IntNode(0))
+    def simplifyed(self, target=None, context=None):
+        return Equation((self.left-self.right).simplifyed(target=target, context=context),intnode.IntNode(0))
 
     def solve(self):
+        factor_node=self.clone()
         self.find_parts()
-        return solvers.solver.solve(self)
+        sol=solvers.solver.solve(self)
+        if sol != None:
+            return sol
+        factor_sol=solvers.factor_solver(factor_node)
+
 
     
     def formatted(self, parent):

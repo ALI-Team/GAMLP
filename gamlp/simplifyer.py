@@ -1,11 +1,11 @@
 import copy
 
-def separate(node):
+def separate(node,target=None, context=None):
     numbers=[]
     term_list=copy.deepcopy(node.terms)
     terms=[]
     for term in term_list:
-        simplifyed_term=term.simplifyed()
+        simplifyed_term=term.simplifyed(target=target, context=context)
         int_val=simplifyed_term.get_int_value()
         if int_val != None:
             numbers.append(int_val.n)
@@ -17,8 +17,8 @@ def separate(node):
             terms.append(simplifyed_term)
     return terms, numbers
 
-def simplify_homogen(node):
-    terms, numbers=separate(node)
+def simplify_homogen(node,target=None, context=None):
+    terms, numbers=separate(node,target=target, context=context)
     if len(numbers) > 0:
         terms.append(intnode.IntNode(node.__class__(*list(map(lambda x:intnode.IntNode(x), numbers))).eval()))
     #terms.extend(vset.nodes())
@@ -26,7 +26,7 @@ def simplify_homogen(node):
         return terms[0]
     else:
         return_node=node.__class__()
-        return_node.merge_in(*terms)
+        return_node.merge_in(*terms, target=target, context=context)
         if len(return_node.terms) == 1:
             return return_node.terms[0]
         return return_node

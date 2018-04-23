@@ -1,3 +1,6 @@
+import copy
+
+
 class Node:
     """Base class for all nodes. Not meant to be used to be directly used only extended
     """
@@ -65,10 +68,15 @@ class Node:
     def child_labels(self, amount=1):
         return None
 
-    def simplifyed(self):
+    def simplifyed(self, target=None, context=None):
         """Return a simplifyed clone of the node.
         """
         raise NotImplementedError
+
+    def clone(self):
+        """Return a clone of the node.
+        """
+        return copy.deepcopy(self)
 
     def simplify(self):
         raise NotImplementedError
