@@ -210,6 +210,9 @@ class SubNode(OperatorNode):
         else:
             return None
 
+    def flattend(self):
+        return SubNode(self.left.flattend(), self.right.flattend())
+
 class DivNode(OperatorNode):
     def __init__(self, left, right):
         self.left=left
