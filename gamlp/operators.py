@@ -35,6 +35,15 @@ class HomogenOperator(OperatorNode):
                     break
             if not merged:
                 self.terms.append(node)
+
+    def flattend(self):
+        children=[]
+        for term in self.terms:
+            if isinstance(term, self.__class__):
+                children.extend(term.flattend().terms)
+            else:
+                children.append(term.flattend())
+        return self.__class__(*children)
             
 
     def merge_two(self, term, node, target=None, context=None):
@@ -235,6 +244,9 @@ class DivNode(OperatorNode):
             return ["Numerator","Denominator"]
         else:
             return None
+
+    def flattend(self):
+        return DivNode(self.left.flattend(), self.right.flattend())
     
 class PowNode(OperatorNode):
     def __init__(self, left, right):
@@ -324,5 +336,9 @@ class PowNode(OperatorNode):
             return ["Base","Exponent"]
         else:
             return None
+
+    def flattend(self):
+        return PowNode(self.left.flattend(), self.right.flattend())
+
 from . import simplifyer
 from . import unitnode

@@ -97,6 +97,8 @@ class Equation(Node):
             self.singel_unknown=False
             #raise ValueError
                     
+    def flattend(self):
+        return Equation(self.left.flattend(), self.right.flattend())
                         
 
             

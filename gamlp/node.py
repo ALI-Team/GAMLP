@@ -125,6 +125,15 @@ class Node:
             return intnode.IntNode(int(value))
         return None
 
+    def flattend(self):
+        """Flatten the tree
+        """
+        children=self.get_children()
+        if children == None:
+            return self
+        print("Node with children but no flatten on class {}".format(self.__class__))
+        raise NotImplementedError
+
 from .operators import *
 from . import intnode
 from .equation import Equation

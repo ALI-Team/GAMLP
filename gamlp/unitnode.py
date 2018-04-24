@@ -59,3 +59,6 @@ class UnitNode(node.Node):
             return ["Unit","Value"]
         else:
             return None
+
+    def flattend(self):
+        return UnitNode(self.unit.flattend(), self.value.flattend())
