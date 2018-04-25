@@ -60,7 +60,7 @@ class Equation(Node):
 
         self.constant=0
         self.solvable_polynom=True
-        for term in self.node.terms:
+        for term in terms:
             if not term.contains_unknowns():
                 self.constant+=term.eval()
             elif isinstance(term, unitnode.UnitNode):
@@ -71,6 +71,9 @@ class Equation(Node):
                 if isinstance(term.unit, varnode.VarNode):
                     add_unknown(term.unit.name,1,amount)
                 elif isinstance(term.unit, operators.PowNode):
+                    if not isinstance(term.unit.left, varnode.VarNode):
+                        self.solvable_polynom=False
+                        return
                     if term.unit.right.contains_unknowns():
                         print("Var in exp not supported")
                         raise ValueError 
