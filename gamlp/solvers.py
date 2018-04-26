@@ -38,7 +38,7 @@ class Solutions:
             solutions=other
         for unknown, solutions in solutions.items():
             if unknown in self.solutions:
-                self.solutions[unknown].union(solutions)
+                self.solutions[unknown]=self.solutions[unknown].union(solutions)
             else:
                 self.solutions[unknown]=set(solutions)
         return self
