@@ -43,7 +43,7 @@ class Equation(Node):
         return [self.left, self.right]
 
     def latex(self):
-        return "{} \eq {}".format(self.left.latex(), self.right.latex())
+        return "{} = {}".format(self.left.latex(), self.right.latex())
         
 
     def find_parts(self):
