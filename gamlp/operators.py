@@ -53,6 +53,9 @@ class HomogenOperator(OperatorNode):
     #def contains(self, value):
         #return True in list(map(lambda x:x.contains(value),self.terms))
 
+    def compact_format(self):
+        return "{sym}{terms}}}".format(sym=self.symbol, terms="|".join(map(lambda x:x.compact_format(),self.terms)))
+
     def get_children(self):
         return self.terms
 
@@ -213,6 +216,9 @@ class SubNode(OperatorNode):
     def flattend(self):
         return SubNode(self.left.flattend(), self.right.flattend())
 
+    def compact_format(self):
+        return "-{left}|{right}}}".format(left=self.left.compact_format(), right=self.right.compact_format())
+
 class DivNode(OperatorNode):
     def __init__(self, left, right):
         self.left=left
@@ -250,6 +256,9 @@ class DivNode(OperatorNode):
 
     def flattend(self):
         return DivNode(self.left.flattend(), self.right.flattend())
+
+    def compact_format(self):
+        return "/{left}|{right}}}".format(left=self.left.compact_format(), right=self.right.compact_format())
     
 class PowNode(OperatorNode):
     def __init__(self, left, right):
@@ -343,5 +352,7 @@ class PowNode(OperatorNode):
     def flattend(self):
         return PowNode(self.left.flattend(), self.right.flattend())
 
+    def compact_format(self):
+        return "^{left}|{right}}}".format(left=self.left.compact_format(), right=self.right.compact_format())
 from . import simplifyer
 from . import unitnode

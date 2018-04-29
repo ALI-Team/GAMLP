@@ -34,3 +34,7 @@ class IntNode(Node):
 
     def label(self, debug=False):
         return str(self.n)
+
+    def compact_format(self):
+        return "#{num}}}".format(num=self.n)
+        

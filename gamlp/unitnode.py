@@ -62,3 +62,6 @@ class UnitNode(node.Node):
 
     def flattend(self):
         return UnitNode(self.unit.flattend(), self.value.flattend())
+
+    def compact_format(self):
+        return "@{unit}|{value}}}".format(unit=self.unit.compact_format(), value=self.value.compact_format())

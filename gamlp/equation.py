@@ -100,6 +100,8 @@ class Equation(Node):
     def flattend(self):
         return Equation(self.left.flattend(), self.right.flattend())
                         
+    def compact_format(self):
+        return "={left}|{right}}}".format(left=self.left.compact_format(), right=self.right.compact_format())
 
             
         

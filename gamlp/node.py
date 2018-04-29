@@ -52,6 +52,10 @@ class Node:
         """
         return None
         
+    def compact_format(self):
+        """Return a compact representation of the tree
+        """
+        raise NotImplementedError
 
     def formatted(self):
         """Return a text representation of the node
