@@ -21,6 +21,8 @@ class LibLexer(Lexer):
     LPAREN = TokenDef(r'\(')
     RPAREN = TokenDef(r'\)')
 
+    SQRT = TokenDef(r'√')
+
     TIMES = TokenDef(r'\*')
     DIVIDE = TokenDef(r'/')
     PLUS = TokenDef(r'\+')
@@ -51,6 +53,7 @@ class LibParser(Parser):
     @attach('e : LPAREN e RPAREN')
     def brackets(self, lparen, expr, rparen):
         return expr
+
 
     @attach('e : e PLUS e')
     def addition(self, left, op, right):
@@ -98,8 +101,10 @@ class LibParser(Parser):
     @attach('e : e EQ e')
     def eq(self, left, eq, right):
         return equation.Equation(left,right)
-def parse(s):
-    return parser.parse(s)
+
+    @attach('e : SQRT LPAREN e RPAREN')
+    def sqrt(self, sqrt , left, exp , right):
+        return SqrtNode(exp)
 
 def parse(s):
     return parser.parse(s)

@@ -60,6 +60,7 @@ symbol_converter={
     "*":lambda x:MulNode(*x),
     "-":lambda x:SubNode(*x),
     "|":lambda x:DivNode(*x),
+    ";":lambda x:SqrtNode(*x),
     "^":lambda x:PowNode(*x),
     "@":create_unitnode,
     "=":lambda x:Equation(*x),

@@ -1,3 +1,5 @@
+import math
+
 from .operatornode import OperatorNode
 import functools
 from . import intnode
@@ -354,5 +356,46 @@ class PowNode(OperatorNode):
 
     def compact_format(self):
         return "^{left}{right}}}".format(left=self.left.compact_format(), right=self.right.compact_format())
+
+class SqrtNode(OperatorNode):
+    def __init__(self, term):
+        self.term=term
+        self.priority=4
+
+    def hash_node(self):
+        return hash(str(self.term.hash_node())+"sqrt")
+
+    def eval(self):
+        return math.sqrt(self.term.eval())
+
+    def formatted(self, parent):
+        return util.parentheses(self,parent,"√({})".format(self.term.formatted(self)))
+    
+    def get_children(self):
+        return [self.term]
+
+    def latex(self):
+        return "\\sqrt{{{}}}".format(self.term.latex())
+
+    def simplifyed(self, target=None, context=None):
+        if self.get_int_value()!=None:
+            return self.get_int_value()
+        return PowNode(self.term,intnode.IntNode(0.5))
+
+    def label(self, debug=False):
+        return "√"
+
+    def child_labels(self, amount=1):
+        if amount > 1:
+            return ["Term"]
+        else:
+            return None
+
+    def flattend(self):
+        return SqrtNode(self.term.flattend())
+
+    def compact_format(self):
+        return ";{term}}}".format(term=self.term.compact_format())
+
 from . import simplifyer
 from . import unitnode
