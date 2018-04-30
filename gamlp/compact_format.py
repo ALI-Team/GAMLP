@@ -48,6 +48,12 @@ def parse(data):
 
 number_charset=set(map(str,range(10))).union(["_","."])
 var_charset=set(map(chr,range(ord("a"),ord("z")+1))).union(map(chr,range(ord("A"),ord("Z")+1)))
+
+def create_unitnode(x):
+    if len(x)==1:
+        return UnitNode(x[0], IntNode(1))
+    else:
+        return UnitNode(*x)
             
 symbol_converter={
     "+":lambda x:AddNode(*x),
@@ -55,8 +61,8 @@ symbol_converter={
     "-":lambda x:SubNode(*x),
     "|":lambda x:DivNode(*x),
     "^":lambda x:PowNode(*x),
-    "@":lambda x:UnitNode(*x),
+    "@":create_unitnode,
     "=":lambda x:Equation(*x),
-    "#":lambda x:IntNode(float(x[0]) if "." in x[0] else int(x[0])),
+    "#":lambda x:IntNode(float(x[0].replace("_","-")) if "." in x[0] else int(x[0].replace("_","-"))),
     "$":lambda x:VarNode(*x)
 }
