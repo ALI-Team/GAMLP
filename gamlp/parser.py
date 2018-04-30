@@ -77,7 +77,7 @@ class LibParser(Parser):
         if isinstance(expr, IntNode):
             return IntNode(-expr.n)
         else:
-            return MulNode(parser.parse(expr), IntNode(-1))
+            return MulNode(expr, IntNode(-1))
 
     @attach('e : INTEGER')
     def number(self, num):
