@@ -330,9 +330,9 @@ class PowNode(OperatorNode):
                 
             
         right_value=self.right.get_int_value()
-        if right_value.eq(intnode.IntNode(1)):
+        if right_value != None and right_value.eq(intnode.IntNode(1)):
             return self.left.simplifyed(target=target, context=context)
-        elif right_value.eq(intnode.IntNode(0)):
+        elif right_value != None and right_value.eq(intnode.IntNode(0)):
             return intnode.IntNode(1)
         return PowNode(left, right) 
 
