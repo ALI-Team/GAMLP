@@ -36,5 +36,5 @@ class IntNode(Node):
         return str(self.n)
 
     def compact_format(self):
-        return "#{num}}}".format(num=self.n)
+        return "{num}}}".format(num=self.n).replace("-","_")
         

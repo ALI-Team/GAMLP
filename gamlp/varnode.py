@@ -49,4 +49,4 @@ class VarNode(Node):
             
         return self.name
     def compact_format(self):
-        return "${name}}}".format(name=self.name)
+        return "{name}}}".format(name=self.name)

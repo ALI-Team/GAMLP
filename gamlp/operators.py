@@ -258,7 +258,7 @@ class DivNode(OperatorNode):
         return DivNode(self.left.flattend(), self.right.flattend())
 
     def compact_format(self):
-        return "/{left}{right}}}".format(left=self.left.compact_format(), right=self.right.compact_format())
+        return "|{left}{right}}}".format(left=self.left.compact_format(), right=self.right.compact_format())
     
 class PowNode(OperatorNode):
     def __init__(self, left, right):
