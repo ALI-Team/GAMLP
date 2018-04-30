@@ -10,8 +10,6 @@ def parse(data):
         if symbol not in ["#","$"]:
             args=list(map(build_node, args))
         return symbol_converter[symbol](args)
-    reading_symbol=True
-    symbol=None
     stack=[]
     data_tree=[]
     current_node=data_tree
