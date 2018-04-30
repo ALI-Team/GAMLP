@@ -79,7 +79,7 @@ def execute():
                     continue
             else:
                 if flags.get("l"):
-                    output(tree.latex())
+                    output(tree.latex(None))
                 else:
                     output(tree)
                 if flags.get("d") or flags.get("b"):

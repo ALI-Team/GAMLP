@@ -1,9 +1,11 @@
-#from .operators import MulNode
+import copy
+
 from .varnode import VarNode
 from . import node
 from . import intnode
 from . import operators
-import copy
+from . import latex
+
 class UnitNode(node.Node):
     def __init__(self, unit, value):
         self.value=value
@@ -15,13 +17,9 @@ class UnitNode(node.Node):
         return hash(str(self.unit.hash_node())+str(self.value.hash_node())+"u")
         
     def simplifyed(self, target=None, context=None):
-        #if not self.unit.contains_unknowns():
-            #return operators.MulNode(self.unit,self.value).simplifyed()
         value_int_val=self.value.get_int_value()
         if value_int_val != None and value_int_val.eq(intnode.IntNode(0)):
             return intnode.IntNode(0)
-        #if self.value.contains(self.unit):
-        #    return (copy.deepcopy(self.value)*copy.deepcopy(UnitNode(self.unit, intnode.IntNode(1)))).simplifyed()
         if self.value.eq(self.unit):
             return UnitNode(operators.PowNode(self.unit.simplifyed(),2), intnode.IntNode(1))
         return UnitNode(self.unit.simplifyed(), self.value.simplifyed())
@@ -32,10 +30,7 @@ class UnitNode(node.Node):
         if int_value != None and int_value.eq(intnode.IntNode(-1)):
             return "-"+self.unit.formatted(self)
 
-        #if isinstance(self.unit, VarNode):
         return "{}{}".format(self.value.formatted(self), self.unit.formatted(self))
-        #else:
-            #return "({})({})".format(self.value.formatted(self), self.unit.formatted(self))
             
 
     def eval(self):
@@ -47,8 +42,16 @@ class UnitNode(node.Node):
     def get_children(self):
         return [self.unit, self.value]
 
-    def latex(self):
-        return "{}{}".format(self.value.latex(), self.unit.latex())
+    def latex(self, parent):
+        #return "{}{}".format(self.value.latex(self), latex.parentheses(self, parent, self.unit.latex(self)))
+        int_value=self.value.get_int_value()
+        if int_value != None and int_value.eq(intnode.IntNode(1)):
+            return latex.parentheses(self.unit,parent,self.unit.latex(parent))
+        if int_value != None and int_value.eq(intnode.IntNode(-1)):
+            return "-"+latex.parentheses(self.unit,parent,self.unit.formatted(self))
+            #return "-"+self.unit.formatted(self)
+
+        return latex.parentheses(self,parent,"{}{}".format(self.value.latex(self), self.unit.latex(self)))
 
     def label(self, debug=False):
         if debug:

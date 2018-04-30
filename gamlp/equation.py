@@ -42,8 +42,8 @@ class Equation(Node):
     def get_children(self):
         return [self.left, self.right]
 
-    def latex(self):
-        return "{} = {}".format(self.left.latex(), self.right.latex())
+    def latex(self, parent):
+        return "{} = {}".format(self.left.latex(self), self.right.latex(self))
         
 
     def find_parts(self):

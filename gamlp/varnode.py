@@ -2,6 +2,7 @@ from .node import Node
 from . import constants
 class VarNode(Node):
     def __init__(self, name):
+        self.priority=5
         self.name=name
         if constants.get(self.name) != None:
             self.is_constant=True
@@ -36,7 +37,7 @@ class VarNode(Node):
     def contains_unknowns(self):
         return not self.is_constant
 
-    def latex(self):
+    def latex(self, parent):
         return self.name
 
     def unknowns(self):

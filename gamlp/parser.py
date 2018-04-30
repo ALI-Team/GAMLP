@@ -79,6 +79,11 @@ class LibParser(Parser):
     def negate(self, minus, expr):
         if isinstance(expr, IntNode):
             return IntNode(-expr.n)
+        elif isinstance(expr, UnitNode):
+            if isinstance(expr.value, IntNode):
+                return UnitNode(expr.unit, IntNode(expr.value.n*-1))
+            else:
+                return UnitNode(expr.unit, MulNode(expr.value, IntNode(-1)))
         else:
             return MulNode(expr, IntNode(-1))
 

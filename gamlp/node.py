@@ -57,7 +57,7 @@ class Node:
         """
         raise NotImplementedError
 
-    def formatted(self):
+    def formatted(self, parent):
         """Return a text representation of the node
         """
         pass
@@ -86,7 +86,7 @@ class Node:
     def simplify(self):
         raise NotImplementedError
 
-    def latex(self):
+    def latex(self, parent):
         """Return latex for the node.
         """
         raise NotImplementedError

@@ -29,7 +29,7 @@ class IntNode(Node):
     def contains_unknowns(self):
         return False
     
-    def latex(self):
+    def latex(self, parent):
         return str(self.n)
 
     def label(self, debug=False):

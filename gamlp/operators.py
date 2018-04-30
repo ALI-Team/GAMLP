@@ -97,8 +97,8 @@ class AddNode(HomogenOperator):
                 return list(filter(lambda x:x[1]==None or (not x[1].eq(intnode.IntNode(0))),map(lambda x:(x,x.get_int_value()),term.terms)))[0][0]
         return term
 
-    def latex(self):
-        return latex.parentheses("+".join(map(lambda x:x.latex(), self.terms)))
+    def latex(self, parent):
+        return latex.parentheses(self, parent, "+".join(map(lambda x:x.latex(self), self.terms)))
 
 
         
@@ -175,8 +175,8 @@ class MulNode(HomogenOperator):
 
         return node
 
-    def latex(self):
-        return latex.parentheses("\\times".join(map(lambda x:x.latex(), self.terms)))
+    def latex(self, parent):
+        return latex.parentheses(self, parent, " \\times ".join(map(lambda x:x.latex(self), self.terms)))
 
 
 class SubNode(OperatorNode):
@@ -204,8 +204,8 @@ class SubNode(OperatorNode):
     def get_children(self):
         return [self.left, self.right]
 
-    def latex(self):
-        return latex.parentheses("{}-{}".format(self.left.latex(),self.right.latex()))
+    def latex(self, parent):
+        return latex.parentheses(self, parent,"{}-{}".format(self.left.latex(self),self.right.latex(self)))
 
     def label(self, debug=False):
         return "-"
@@ -239,8 +239,8 @@ class DivNode(OperatorNode):
     def get_children(self):
         return [self.left, self.right]
 
-    def latex(self):
-        return "\\frac{{{}}}{{{}}}".format(self.left.latex(),self.right.latex())
+    def latex(self, parent):
+        return "\\frac{{{}}}{{{}}}".format(self.left.latex(self),self.right.latex(self))
 
     def simplifyed(self, target=None, context=None):
         if self.get_int_value()!=None:
@@ -341,8 +341,8 @@ class PowNode(OperatorNode):
     def get_children(self):
         return [self.left, self.right]
 
-    def latex(self):
-        return "{{{}}}^{{{}}}".format(self.left.latex(),self.right.latex())
+    def latex(self, parent):
+        return "{{{}}}^{{{}}}".format(latex.parentheses(self,parent, self.left.latex(self)),self.right.latex(self))
     def label(self, debug=False):
         return "^"
     def child_labels(self, amount=1):
@@ -374,8 +374,8 @@ class SqrtNode(OperatorNode):
     def get_children(self):
         return [self.term]
 
-    def latex(self):
-        return "\\sqrt{{{}}}".format(self.term.latex())
+    def latex(self, parent):
+        return "\\sqrt{{{}}}".format(self.term.latex(self))
 
     def simplifyed(self, target=None, context=None):
         if self.get_int_value()!=None:
