@@ -1,4 +1,4 @@
-# GAMLP
+# GAMLP (GA Math Lib Python)
 
 ## Installation
 ```
