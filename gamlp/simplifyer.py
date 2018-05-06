@@ -2,7 +2,19 @@ import copy
 
 def separate(node,target=None, context=None):
     numbers=[]
-    term_list=copy.deepcopy(node.terms)
+    if isinstance(node, operators.MulNode):
+        expanded_terms=[]
+        for term in node.terms:
+            if isinstance(term, unitnode.UnitNode):
+                expanded_terms.append(unitnode.UnitNode(term.unit, intnode.IntNode(1)))
+                expanded_terms.append(term.value)
+            else:
+                expanded_terms.append(term)
+    else:
+        expanded_terms=node.terms
+            
+        
+    term_list=copy.deepcopy(expanded_terms)
     terms=[]
     for term in term_list:
         simplifyed_term=term.simplifyed(target=target, context=context)
@@ -35,3 +47,4 @@ def simplify_homogen(node,target=None, context=None):
 from . import intnode
 from . import variable
 from . import unitnode
+from . import operators

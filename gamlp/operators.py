@@ -112,6 +112,20 @@ class MulNode(HomogenOperator):
         return functools.reduce(lambda x,y:x*y, map(lambda z:z.eval(), self.terms))
 
     def merge_two(self, term, node, target=None, context=None):
+        def strip_unit(x):
+            if isinstance(x, unitnode.UnitNode) and x.value.eq(intnode.IntNode(1)):
+                return (x.unit,True)
+            return (x, False)
+        def unit_wrap(x):
+            if is_unit:
+                return unitnode.UnitNode(x, intnode.IntNode(1))
+            else:
+                return x
+
+        term,term_unit=strip_unit(term)
+        node,node_unit=strip_unit(node)
+        is_unit=term_unit or node_unit
+        """
         if isinstance(term, unitnode.UnitNode) or isinstance(node, unitnode.UnitNode):
             if isinstance(term, unitnode.UnitNode) and isinstance(node, unitnode.UnitNode):
                 if term.unit.eq(node.unit):
@@ -130,7 +144,12 @@ class MulNode(HomogenOperator):
                     raise ValueError("um dafuq")
                 return_val=unitnode.UnitNode(unit_node.unit, (unit_node.value*other_node)).simplifyed(target=target, context=context)
                 return return_val
+        """
+        if term.eq(node):
+            return unit_wrap(PowNode(term, intnode.IntNode(2)).simplifyed(target=target, context=context))
         if isinstance(term, PowNode) or isinstance(node, PowNode):
+            if isinstance(term, PowNode) and isinstance(node, PowNode) and term.left.eq(node.left):
+                return unit_wrap(PowNode(term.left, AddNode(term.right,node.right)).simplifyed(target=target, context=context))
             if isinstance(term, PowNode):
                 pownode=term
                 other=node
@@ -138,7 +157,7 @@ class MulNode(HomogenOperator):
                 pownode=node
                 other=term
             if pownode.left.eq(other):
-                return PowNode(pownode.left,AddNode(pownode.right+intnode.IntNode(1)).simplifyed(target=target, context=context)).simplifyed(target=target, context=context)
+                return unit_wrap(PowNode(pownode.left,AddNode(pownode.right+intnode.IntNode(1)).simplifyed(target=target, context=context)).simplifyed(target=target, context=context))
         return None
     def label(self, debug=False):
         return "×"
@@ -147,6 +166,20 @@ class MulNode(HomogenOperator):
         if self.get_int_value()!=None:
             return self.get_int_value()
         node=simplifyer.simplify_homogen(self, target=target, context=context)
+        if isinstance(node, MulNode):
+            unitnodes=[]
+            others=[]
+            for child_node in node.terms:
+                iv=child_node.get_int_value()
+                if iv != None and iv.eq(intnode.IntNode(1)):
+                    continue
+                elif isinstance(child_node, unitnode.UnitNode):
+                    unitnodes.append(child_node)
+                else:
+                    others.append(child_node)
+            if len(unitnodes) == len(others) == 1:
+                if not others[0].contains_unknowns():
+                    node=unitnode.UnitNode(unitnodes[0].unit, MulNode(unitnodes[0].value, others[0])).simplifyed(target=target, context=target)
         if target=="FACTOR":
             return node
         if isinstance(node, MulNode):
@@ -168,11 +201,9 @@ class MulNode(HomogenOperator):
             if len(resulting_node.terms)==1:
                 if issubclass(resulting_node.terms[0].__class__,HomogenOperator) and len(resulting_node.terms[0].terms)==1:
                     return resulting_node.terms[0].terms[0]
-
                     
                 return resulting_node.terms[0]
             return resulting_node.simplifyed(target=target, context=target)
-
         return node
 
     def latex(self, parent):
@@ -291,6 +322,8 @@ class PowNode(OperatorNode):
             return unitnode.UnitNode(copy.deepcopy(left.unit)**copy.deepcopy(right), copy.deepcopy(left.value)**copy.deepcopy(right)).simplifyed(target=target, context=context)
         elif isinstance(left, MulNode):
             return MulNode(*list(map(lambda x:x**copy.deepcopy(self.right),copy.deepcopy(left.terms)))).simplifyed(target=target, context=context)
+        elif isinstance(left, PowNode):
+            return PowNode(left.left, MulNode(left.right,right)).simplifyed(target=target, context=context)
 
         elif isinstance(left, AddNode) and right.get_int_value() != None and target!="FACTOR":
             l = len(left.terms)
@@ -380,7 +413,7 @@ class SqrtNode(OperatorNode):
     def simplifyed(self, target=None, context=None):
         if self.get_int_value()!=None:
             return self.get_int_value()
-        return PowNode(self.term,intnode.IntNode(0.5))
+        return PowNode(self.term,intnode.IntNode(0.5)).simplifyed(target=target, context=context)
 
     def label(self, debug=False):
         return "√"
